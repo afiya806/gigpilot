@@ -6,3 +6,4 @@ reportlab==4.2.5
 anthropic==0.42.0
 aiofiles==24.1.0
 python-dateutil==2.9.0
+gunicorn==23.0.0
