@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Invoice Generator - GigPilot{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-surface-900">Invoice Generator</h2>
+        <p class="text-sm text-gray-500 mt-1">Generate GST-compliant invoices. Download as PDF.</p>
+    </div>
+
+    <div class="grid grid-cols-5 gap-6">
+        <!-- Form -->
+        <div class="col-span-3">
+            <form id="invoiceForm" class="space-y-5">
+                <!-- From / To -->
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="bg-white rounded-xl border border-gray-100 p-5">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">From (Your Details)</h3>
+                        <div class="space-y-3">
+                            <input name="from_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Your Name / Business">
+                            <input name="from_address" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Address, City, State, PIN">
+                            <input name="from_gstin" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="GSTIN (optional)">
+                            <input name="from_pan" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="PAN (optional)">
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 p-5">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Bill To (Client)</h3>
+                        <div class="space-y-3">
+                            <input name="to_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Client Name / Company">
+                            <input name="to_address" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Client Address">
+                            <input name="to_gstin" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Client GSTIN (optional)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items -->
+                <div class="bg-white rounded-xl border border-gray-100 p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Line Items</h3>
+                        <button type="button" onclick="addItem()" class="text-xs text-brand-600 font-medium hover:text-brand-700">+ Add Item</button>
+                    </div>
+                    <div id="lineItems">
+                        <div class="grid grid-cols-12 gap-2 mb-2 text-xs text-gray-500 font-medium">
+                            <div class="col-span-5">Description</div>
+                            <div class="col-span-2">HSN/SAC</div>
+                            <div class="col-span-1">Qty</div>
+                            <div class="col-span-2">Rate</div>
+                            <div class="col-span-2">Amount</div>
+                        </div>
+                        <div class="item-row grid grid-cols-12 gap-2 mb-2">
+                            <input class="col-span-5 px-2 py-1.5 border border-gray-200 rounded text-sm item-desc" placeholder="Web Development" value="Consulting Services">
+                            <input class="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm item-hsn" placeholder="998314" value="998314">
+                            <input class="col-span-1 px-2 py-1.5 border border-gray-200 rounded text-sm item-qty text-center" type="number" value="1" min="1" onchange="calcRow(this)">
+                            <input class="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm item-rate text-right" type="number" placeholder="0" onchange="calcRow(this)">
+                            <div class="col-span-2 px-2 py-1.5 text-sm text-right font-medium item-amount text-gray-700">0.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GST & Payment -->
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="bg-white rounded-xl border border-gray-100 p-5">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Tax Settings</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-gray-600">GST Rate (%)</label>
+                                <select name="gst_rate" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm mt-1">
+                                    <option value="0">0% (Exempt)</option>
+                                    <option value="5">5%</option>
+                                    <option value="12">12%</option>
+                                    <option value="18" selected>18%</option>
+                                    <option value="28">28%</option>
+                                </select>
+                            </div>
+                            <label class="flex items-center gap-2 text-sm">
+                                <input type="checkbox" name="is_igst" class="rounded border-gray-300 text-brand-600">
+                                <span class="text-gray-700">Interstate supply (IGST instead of CGST+SGST)</span>
+                            </label>
+                            <div>
+                                <label class="text-xs text-gray-600">Currency</label>
+                                <select name="currency" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm mt-1">
+                                    <option value="INR" selected>INR</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 p-5">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Bank Details</h3>
+                        <div class="space-y-3">
+                            <input name="bank_account_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Account Name">
+                            <input name="bank_name" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Bank Name">
+                            <input name="bank_account_number" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Account Number">
+                            <input name="bank_ifsc" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="IFSC Code">
+                            <input name="bank_upi" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="UPI ID (optional)">
+                        </div>
+                    </div>
+                </div>
+
+                <textarea name="notes" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm" placeholder="Notes (e.g., Payment due within 30 days)">Payment due within 30 days of invoice date.</textarea>
+
+                <button type="button" onclick="generateInvoice()" id="genBtn"
+                        class="w-full py-3 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-700 transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Generate Invoice PDF
+                </button>
+            </form>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="col-span-2">
+            <div class="bg-white rounded-xl border border-gray-100 p-5 sticky top-8">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">Preview</h3>
+                <div id="previewPanel" class="flex flex-col items-center justify-center min-h-[400px] text-gray-400">
+                    <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+                    <p class="text-sm">Fill the form and generate</p>
+                </div>
+                <iframe id="pdfPreview" class="hidden w-full h-[600px] rounded-lg border border-gray-200"></iframe>
+                <a id="downloadLink" class="hidden mt-3 w-full py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors text-center block">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addItem() {
+    const row = document.createElement('div');
+    row.className = 'item-row grid grid-cols-12 gap-2 mb-2';
+    row.innerHTML = `
+        <input class="col-span-5 px-2 py-1.5 border border-gray-200 rounded text-sm item-desc" placeholder="Service description">
+        <input class="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm item-hsn" value="998314">
+        <input class="col-span-1 px-2 py-1.5 border border-gray-200 rounded text-sm item-qty text-center" type="number" value="1" min="1" onchange="calcRow(this)">
+        <input class="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm item-rate text-right" type="number" placeholder="0" onchange="calcRow(this)">
+        <div class="col-span-2 px-2 py-1.5 text-sm text-right font-medium item-amount text-gray-700">0.00</div>
+    `;
+    document.getElementById('lineItems').appendChild(row);
+}
+
+function calcRow(el) {
+    const row = el.closest('.item-row');
+    const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+    const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+    row.querySelector('.item-amount').textContent = (qty * rate).toLocaleString('en-IN', {minimumFractionDigits: 2});
+}
+
+async function generateInvoice() {
+    const form = document.getElementById('invoiceForm');
+    const items = [];
+    document.querySelectorAll('.item-row').forEach(row => {
+        const desc = row.querySelector('.item-desc').value;
+        const hsn = row.querySelector('.item-hsn').value;
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 1;
+        const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+        if (desc && rate > 0) items.push({ description: desc, hsn_sac: hsn, quantity: qty, rate: rate });
+    });
+
+    if (items.length === 0) { alert('Add at least one line item with a rate.'); return; }
+
+    const data = {
+        from_name: form.querySelector('[name=from_name]').value,
+        from_address: form.querySelector('[name=from_address]').value,
+        from_gstin: form.querySelector('[name=from_gstin]').value,
+        from_pan: form.querySelector('[name=from_pan]').value,
+        to_name: form.querySelector('[name=to_name]').value,
+        to_address: form.querySelector('[name=to_address]').value,
+        to_gstin: form.querySelector('[name=to_gstin]').value,
+        items: items,
+        gst_rate: parseFloat(form.querySelector('[name=gst_rate]').value),
+        is_igst: form.querySelector('[name=is_igst]').checked,
+        currency: form.querySelector('[name=currency]').value,
+        notes: form.querySelector('[name=notes]').value,
+        bank_details: {
+            account_name: form.querySelector('[name=bank_account_name]').value,
+            bank_name: form.querySelector('[name=bank_name]').value,
+            account_number: form.querySelector('[name=bank_account_number]').value,
+            ifsc: form.querySelector('[name=bank_ifsc]').value,
+            upi_id: form.querySelector('[name=bank_upi]').value,
+        }
+    };
+
+    document.getElementById('genBtn').textContent = 'Generating...';
+    try {
+        const res = await fetch('/api/generate-invoice', {
+            method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        const pdfBytes = atob(result.pdf_base64);
+        const arr = new Uint8Array(pdfBytes.length);
+        for (let i = 0; i < pdfBytes.length; i++) arr[i] = pdfBytes.charCodeAt(i);
+        const blob = new Blob([arr], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+
+        document.getElementById('previewPanel').classList.add('hidden');
+        const iframe = document.getElementById('pdfPreview');
+        iframe.src = url;
+        iframe.classList.remove('hidden');
+
+        const dl = document.getElementById('downloadLink');
+        dl.href = url;
+        dl.download = result.filename;
+        dl.classList.remove('hidden');
+    } catch(e) {
+        alert('Error generating invoice.');
+    }
+    document.getElementById('genBtn').innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Generate Invoice PDF';
+}
+</script>
+{% endblock %}

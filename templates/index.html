@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - GigPilot{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900">Dashboard</h2>
+            <p class="text-sm text-gray-500 mt-1">Your freelance command center</p>
+        </div>
+        <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')"
+                class="px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            New Project
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-4 gap-5 mb-8">
+        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Projects</span>
+                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-surface-900" id="activeCount">{{ dashboard.total_active_projects }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Completed</span>
+                <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-surface-900">{{ dashboard.total_completed }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Revenue</span>
+                <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-surface-900">&#8377;{{ "{:,.0f}".format(dashboard.total_active_revenue) }}</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Hours Logged</span>
+                <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-surface-900">{{ dashboard.total_hours_logged }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+        <!-- Overdue Projects -->
+        <div class="col-span-1">
+            <div class="bg-white rounded-xl border border-gray-100 p-5">
+                <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                    Overdue
+                </h3>
+                {% if dashboard.overdue_projects %}
+                    {% for p in dashboard.overdue_projects %}
+                    <div class="mb-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                        <p class="text-sm font-medium text-red-900">{{ p.title }}</p>
+                        <p class="text-xs text-red-600 mt-1">{{ p.client }} &middot; {{ p.days_left|abs }} days overdue</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-sm text-gray-400 italic">No overdue projects. Nice!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="col-span-2">
+            <div class="bg-white rounded-xl border border-gray-100 p-5">
+                <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    Upcoming Deadlines
+                </h3>
+                {% if dashboard.upcoming_deadlines %}
+                    <div class="space-y-3">
+                    {% for p in dashboard.upcoming_deadlines %}
+                    <div class="flex items-center justify-between p-3 bg-surface-50 rounded-lg">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">{{ p.title }}</p>
+                            <p class="text-xs text-gray-500">{{ p.client }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if p.days_left <= 3 %}bg-red-100 text-red-700{% elif p.days_left <= 7 %}bg-amber-100 text-amber-700{% else %}bg-green-100 text-green-700{% endif %}">
+                                {{ p.days_left }} days left
+                            </span>
+                            <p class="text-xs text-gray-400 mt-1">{{ p.deadline }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-sm text-gray-400 italic">No upcoming deadlines. Add a project to get started.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- All Projects -->
+    <div class="mt-6 bg-white rounded-xl border border-gray-100 p-5">
+        <h3 class="text-sm font-semibold text-gray-900 mb-4">All Projects</h3>
+        {% if dashboard.projects %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Project</th>
+                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Client</th>
+                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Deadline</th>
+                        <th class="text-right py-3 px-2 text-xs font-medium text-gray-500 uppercase">Budget</th>
+                        <th class="text-right py-3 px-2 text-xs font-medium text-gray-500 uppercase">Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in dashboard.projects %}
+                    <tr class="border-b border-gray-50 hover:bg-surface-50 transition-colors">
+                        <td class="py-3 px-2 font-medium text-gray-900">{{ p.title }}</td>
+                        <td class="py-3 px-2 text-gray-600">{{ p.client }}</td>
+                        <td class="py-3 px-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {% if p.status == 'active' %}bg-blue-50 text-blue-700{% elif p.status == 'completed' %}bg-green-50 text-green-700{% else %}bg-gray-100 text-gray-600{% endif %}">
+                                {{ p.status }}
+                            </span>
+                        </td>
+                        <td class="py-3 px-2 text-gray-600">{{ p.deadline or 'N/A' }}</td>
+                        <td class="py-3 px-2 text-right text-gray-900 font-medium">&#8377;{{ "{:,.0f}".format(p.budget|float) }}</td>
+                        <td class="py-3 px-2 text-right text-gray-600">{{ p.hours_logged }}h</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+            <p class="text-gray-500 text-sm">No projects yet. Parse a client email or add one manually.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add Project Modal -->
+<div id="addProjectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+        <div class="flex items-center justify-between mb-5">
+            <h3 class="text-lg font-semibold text-gray-900">Add New Project</h3>
+            <button onclick="document.getElementById('addProjectModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="addProjectForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Project Title</label>
+                    <input name="title" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Website Redesign">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Client</label>
+                    <input name="client" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Acme Corp">
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Deadline</label>
+                    <input name="deadline" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Budget (INR)</label>
+                    <input name="budget" type="number" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="50000">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Est. Hours</label>
+                    <input name="hours_estimated" type="number" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="40">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">Priority</label>
+                <select name="priority" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors">
+                Add Project
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('addProjectForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const data = Object.fromEntries(fd.entries());
+    data.budget = parseFloat(data.budget) || 0;
+    data.hours_estimated = parseFloat(data.hours_estimated) || 0;
+    await fetch('/api/projects', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+    document.getElementById('addProjectModal').classList.add('hidden');
+    location.reload();
+});
+</script>
+{% endblock %}

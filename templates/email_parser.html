@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Email Parser - GigPilot{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-surface-900">Email Parser Agent</h2>
+        <p class="text-sm text-gray-500 mt-1">Paste a client email. AI extracts scope, deadlines, deliverables, and red flags.</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6">
+        <!-- Input -->
+        <div>
+            <div class="bg-white rounded-xl border border-gray-100 p-5">
+                <label class="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">Client Email</label>
+                <textarea id="emailInput" rows="16" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm resize-none leading-relaxed"
+                    placeholder="Hi, we're looking for a freelance developer to build our new e-commerce platform. Budget is around 2,00,000 INR. We need it done by March 15, 2026.
+
+Deliverables:
+- Homepage redesign
+- Product catalog with filters
+- Checkout and payment integration
+- Admin dashboard
+
+Let me know if you're interested.
+
+Thanks,
+Priya Sharma
+TechStart Solutions"></textarea>
+                <button id="parseBtn" onclick="parseEmail()" class="mt-4 w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Parse with AI
+                </button>
+            </div>
+        </div>
+
+        <!-- Output -->
+        <div>
+            <div id="resultPanel" class="bg-white rounded-xl border border-gray-100 p-5 min-h-[480px]">
+                <div id="emptyState" class="flex flex-col items-center justify-center h-96 text-gray-400">
+                    <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <p class="text-sm">Paste an email and click Parse</p>
+                </div>
+                <div id="loadingState" class="hidden flex flex-col items-center justify-center h-96">
+                    <div class="w-8 h-8 border-2 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-3"></div>
+                    <p class="text-sm text-gray-500">AI agent analyzing email...</p>
+                </div>
+                <div id="resultContent" class="hidden space-y-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function parseEmail() {
+    const text = document.getElementById('emailInput').value.trim();
+    if (!text) return;
+
+    document.getElementById('emptyState').classList.add('hidden');
+    document.getElementById('resultContent').classList.add('hidden');
+    document.getElementById('loadingState').classList.remove('hidden');
+
+    try {
+        const res = await fetch('/api/parse-email', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email_text: text })
+        });
+        const data = await res.json();
+        renderResult(data);
+    } catch(e) {
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('resultContent').innerHTML = '<p class="text-red-500 text-sm">Error parsing email. Please try again.</p>';
+        document.getElementById('resultContent').classList.remove('hidden');
+    }
+}
+
+function renderResult(data) {
+    document.getElementById('loadingState').classList.add('hidden');
+    const c = document.getElementById('resultContent');
+
+    let priorityColor = data.priority === 'high' ? 'red' : data.priority === 'medium' ? 'amber' : 'green';
+
+    let html = `
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold text-gray-900">Extracted Information</h3>
+            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-${priorityColor}-100 text-${priorityColor}-700">${data.priority} priority</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-surface-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">Client</p>
+                <p class="text-sm font-medium text-gray-900">${data.client_name || 'Unknown'}</p>
+            </div>
+            <div class="p-3 bg-surface-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">Budget</p>
+                <p class="text-sm font-medium text-gray-900">${data.budget ? (data.currency === 'INR' ? '₹' : '$') + Number(data.budget).toLocaleString() : 'Not specified'}</p>
+            </div>
+            <div class="p-3 bg-surface-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">Deadline</p>
+                <p class="text-sm font-medium text-gray-900">${data.deadline || 'Not specified'}</p>
+            </div>
+            <div class="p-3 bg-surface-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">Project</p>
+                <p class="text-sm font-medium text-gray-900">${data.project_title || 'Untitled'}</p>
+            </div>
+        </div>
+
+        <div class="p-3 bg-surface-50 rounded-lg">
+            <p class="text-xs text-gray-500 mb-1">Scope</p>
+            <p class="text-sm text-gray-800">${data.scope || 'See email for details'}</p>
+        </div>
+    `;
+
+    if (data.deliverables && data.deliverables.length > 0) {
+        html += `<div class="p-3 bg-surface-50 rounded-lg">
+            <p class="text-xs text-gray-500 mb-2">Deliverables</p>
+            <ul class="space-y-1">${data.deliverables.map(d => `<li class="text-sm text-gray-800 flex items-start gap-2"><svg class="w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${d}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    if (data.red_flags && data.red_flags.length > 0) {
+        html += `<div class="p-3 bg-red-50 rounded-lg border border-red-100">
+            <p class="text-xs text-red-600 font-medium mb-2">Red Flags</p>
+            <ul class="space-y-1">${data.red_flags.map(f => `<li class="text-sm text-red-700 flex items-start gap-2"><svg class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>${f}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    if (data.action_items && data.action_items.length > 0) {
+        html += `<div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+            <p class="text-xs text-blue-600 font-medium mb-2">Suggested Next Steps</p>
+            <ul class="space-y-1">${data.action_items.map(a => `<li class="text-sm text-blue-800">${a}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    html += `<button onclick="addAsProject()" class="w-full py-2 bg-surface-900 text-white text-sm rounded-lg hover:bg-surface-800 transition-colors mt-2">
+        Add as Project to Dashboard
+    </button>`;
+
+    c.innerHTML = html;
+    c.classList.remove('hidden');
+    window._parsedData = data;
+}
+
+async function addAsProject() {
+    const d = window._parsedData;
+    if (!d) return;
+    await fetch('/api/projects', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            title: d.project_title || 'New Project',
+            client: d.client_name || 'Unknown',
+            deadline: d.deadline || '',
+            budget: parseFloat(d.budget) || 0,
+            currency: d.currency || 'INR',
+            priority: d.priority || 'medium',
+            deliverables: d.deliverables || [],
+        })
+    });
+    alert('Project added to dashboard!');
+}
+</script>
+{% endblock %}
