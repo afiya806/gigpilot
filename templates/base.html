@@ -9,7 +9,7 @@
     <meta property="og:description" content="All-in-one back-office for freelancers: parse client emails, generate GST invoices, scan contracts, estimate taxes, and track every project.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#111111">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="icon" href="/static/logo.png" type="image/png">
     <title>{% block title %}GigPilot{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,6 +191,54 @@
     {% block head %}{% endblock %}
 </head>
 <body class="h-full bg-neutral-50">
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="splash-logo-wrap mb-6">
+            <img src="/static/logo.png" alt="GigPilot" class="w-16 h-16 object-contain">
+        </div>
+        <h1 class="text-xl font-semibold text-neutral-900 tracking-tight mb-1">GigPilot</h1>
+        <p class="text-xs text-neutral-400 mb-8">Your freelance command center</p>
+        <div class="splash-bar">
+            <div class="splash-bar-fill"></div>
+        </div>
+    </div>
+    <style>
+        .splash-logo-wrap {
+            animation: splashPulse 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes splashPulse {
+            from { transform: scale(1); opacity: 0.85; }
+            to { transform: scale(1.06); opacity: 1; }
+        }
+        .splash-bar {
+            width: 120px; height: 3px;
+            background: #F0F0F0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .splash-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #111111;
+            border-radius: 3px;
+            animation: splashLoad 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes splashLoad {
+            0% { width: 0%; }
+            60% { width: 70%; }
+            100% { width: 100%; }
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(function() { splash.remove(); }, 500);
+            }, 1600);
+        });
+    </script>
+
     <div class="min-h-full flex">
         <!-- Mobile menu button -->
         <button id="mobileMenuBtn" onclick="toggleSidebar()" class="lg:hidden fixed top-3 left-3 z-50 w-9 h-9 rounded-lg bg-white border border-neutral-200 flex items-center justify-center shadow-sm hover:bg-neutral-50 transition-colors">
@@ -205,11 +253,7 @@
             <!-- Brand -->
             <div class="px-4 pt-5 pb-3">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-neutral-950 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
+                    <img src="/static/logo.png" alt="GigPilot" class="w-7 h-7 rounded-lg object-contain">
                     <div>
                         <h1 class="text-sm font-semibold text-neutral-900 tracking-tight">GigPilot</h1>
                     </div>
