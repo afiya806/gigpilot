@@ -57,6 +57,20 @@ def indian_number(value):
 
 templates.env.filters["indian_number"] = indian_number
 
+
+def format_date_indian(value):
+    """Format YYYY-MM-DD to DD Mon YYYY (e.g., 15 Oct 2026)."""
+    if not value:
+        return "—"
+    try:
+        dt = datetime.fromisoformat(str(value).split("T")[0])
+        return dt.strftime("%d %b %Y")
+    except (ValueError, TypeError):
+        return str(value)
+
+
+templates.env.filters["indian_date"] = format_date_indian
+
 # Initialize agents
 email_agent = EmailParserAgent()
 invoice_agent = InvoiceGeneratorAgent()

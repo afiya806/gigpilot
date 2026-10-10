@@ -167,7 +167,7 @@ class DeadlineTrackerAgent:
 
     def get_dashboard(self) -> dict:
         projects = _load_projects()
-        now = datetime.now()
+        today = datetime.now().date()
 
         active = [p for p in projects if p.get("status") == "active"]
         completed = [p for p in projects if p.get("status") == "completed"]
@@ -178,10 +178,11 @@ class DeadlineTrackerAgent:
             if p.get("deadline"):
                 try:
                     dl = datetime.fromisoformat(p["deadline"]) if "T" in p["deadline"] else datetime.strptime(p["deadline"], "%Y-%m-%d")
-                    days_left = (dl - now).days
+                    dl_date = dl.date() if isinstance(dl, datetime) else dl
+                    days_left = (dl_date - today).days
                     hours_est = float(p.get("hours_estimated", 0))
                     hours_logged = float(p.get("hours_logged", 0))
-                    progress = round(hours_logged / hours_est * 100) if hours_est > 0 else 0
+                    progress = min(round(hours_logged / hours_est * 100), 100) if hours_est > 0 else 0
 
                     # Risk assessment
                     risk = "on-track"
@@ -240,7 +241,7 @@ class DeadlineTrackerAgent:
             "total_earned": total_earned,
             "total_hours_logged": total_hours,
             "total_estimated_hours": total_est_hours,
-            "projects": self._sort_projects(projects, now),
+            "projects": self._sort_projects(projects, today),
             "workload_health": workload_score,
             "client_breakdown": client_breakdown,
             "avg_hourly_rate": avg_hourly,
@@ -248,7 +249,7 @@ class DeadlineTrackerAgent:
             "at_risk_count": sum(1 for u in upcoming if u.get("risk") in ("at-risk", "tight")),
         }
 
-    def _sort_projects(self, projects, now):
+    def _sort_projects(self, projects, today):
         """Sort: overdue active → active by deadline → completed → cancelled."""
         def sort_key(p):
             status = p.get("status", "")
@@ -257,7 +258,8 @@ class DeadlineTrackerAgent:
                 if deadline:
                     try:
                         dl = datetime.fromisoformat(deadline) if "T" in deadline else datetime.strptime(deadline, "%Y-%m-%d")
-                        days = (dl - now).days
+                        dl_date = dl.date() if isinstance(dl, datetime) else dl
+                        days = (dl_date - today).days
                         if days < 0:
                             return (0, days)  # overdue first, most overdue at top
                         return (1, days)  # active by closest deadline
@@ -273,8 +275,8 @@ class DeadlineTrackerAgent:
         """Calculate workload health: 0-100."""
         score = 100
 
-        # Penalize heavily for overdue — any overdue project should drop out of "healthy"
-        score -= len(overdue) * 25
+        # Penalize for overdue
+        score -= len(overdue) * 15
 
         # Penalize for too many active projects
         if len(active) > 5:
@@ -286,20 +288,12 @@ class DeadlineTrackerAgent:
         at_risk = sum(1 for u in upcoming if u.get("risk") in ("at-risk", "tight"))
         score -= at_risk * 10
 
-        # Penalize for high-priority items with very low progress
-        for p in active:
-            if p.get("priority") == "high":
-                hours_est = float(p.get("hours_estimated", 0))
-                hours_logged = float(p.get("hours_logged", 0))
-                if hours_est > 0 and (hours_logged / hours_est) < 0.15:
-                    score -= 5  # Barely started high-priority work
-
         # Bonus for having buffer time
         if upcoming and upcoming[0].get("days_left", 0) > 7:
             score += 5
 
         status = "healthy"
-        if score >= 75:
+        if score >= 80:
             status = "healthy"
         elif score >= 50:
             status = "moderate"
@@ -313,9 +307,7 @@ class DeadlineTrackerAgent:
         }
 
     def _workload_message(self, status, active_count, overdue_count):
-        if status == "healthy" and overdue_count > 0:
-            return f"{active_count} active project(s), but {overdue_count} overdue — address those first."
-        elif status == "healthy":
+        if status == "healthy":
             return f"Looking good! {active_count} active project(s), workload is manageable."
         elif status == "moderate":
             msg = f"Watch your bandwidth — {active_count} active project(s)"
@@ -364,7 +356,7 @@ class DeadlineTrackerAgent:
                 p["hours_logged"] = float(p.get("hours_logged", 0)) + hours
                 _save_projects(projects)
                 hours_est = float(p.get("hours_estimated", 0))
-                progress = round(p["hours_logged"] / hours_est * 100) if hours_est > 0 else 0
+                progress = min(round(p["hours_logged"] / hours_est * 100), 100) if hours_est > 0 else 0
                 return {
                     "project": p["title"],
                     "hours_logged": p["hours_logged"],

@@ -16,7 +16,7 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 mb-8">
         <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#3b82f6;--accent-to:#6366f1;">
             <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active</span>
@@ -45,17 +45,27 @@
                 </div>
             </div>
             <p class="text-3xl font-extrabold text-surface-900">&#8377;{{ dashboard.total_active_revenue|indian_number }}</p>
-            <p class="text-xs text-gray-400 mt-1">active projects value</p>
+            <p class="text-xs text-gray-400 mt-1">active projects</p>
         </div>
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#f59e0b;--accent-to:#fbbf24;">
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#10b981;--accent-to:#059669;">
             <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Earned</span>
-                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
             </div>
             <p class="text-3xl font-extrabold text-surface-900">&#8377;{{ dashboard.total_earned|indian_number }}</p>
             <p class="text-xs text-gray-400 mt-1">completed &amp; paid</p>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#f59e0b;--accent-to:#fbbf24;">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Hours</span>
+                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_hours_logged }}</p>
+            <p class="text-xs text-gray-400 mt-1">hours logged</p>
         </div>
     </div>
 
@@ -155,8 +165,8 @@
                         {% if p.hours_estimated and p.hours_estimated > 0 %}
                         <div class="mt-2">
                             <div class="flex justify-between text-[10px] text-red-500 mb-1">
-                                <span>{{ p.hours_logged|int }}h / {{ p.hours_estimated|int }}h</span>
-                                <span>{{ [((p.hours_logged / p.hours_estimated) * 100)|round|int, 100]|min }}%</span>
+                                <span>{{ p.hours_logged }}h / {{ p.hours_estimated }}h</span>
+                                <span>{{ ((p.hours_logged / p.hours_estimated) * 100)|round|int }}%</span>
                             </div>
                             <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
                                 <div class="h-full bg-red-400 rounded-full" style="width:{{ [((p.hours_logged / p.hours_estimated) * 100)|round|int, 100]|min }}%"></div>
@@ -188,19 +198,18 @@
                     <div class="space-y-3">
                     {% for p in dashboard.upcoming_deadlines %}
                     <div class="flex items-center gap-4 p-3.5 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors group">
-                        <div class="w-12 h-10 rounded-xl {% if p.days_left <= 3 %}bg-red-100{% elif p.days_left <= 7 %}bg-amber-100{% else %}bg-emerald-100{% endif %} flex flex-col items-center justify-center flex-shrink-0">
-                            <span class="text-sm font-bold leading-none {% if p.days_left <= 3 %}text-red-600{% elif p.days_left <= 7 %}text-amber-600{% else %}text-emerald-600{% endif %}">{{ p.days_left }}</span>
-                            <span class="text-[8px] {% if p.days_left <= 3 %}text-red-400{% elif p.days_left <= 7 %}text-amber-400{% else %}text-emerald-400{% endif %}">days</span>
+                        <div class="w-10 h-10 rounded-xl {% if p.days_left <= 3 %}bg-red-100{% elif p.days_left <= 7 %}bg-amber-100{% else %}bg-emerald-100{% endif %} flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-bold {% if p.days_left <= 3 %}text-red-600{% elif p.days_left <= 7 %}text-amber-600{% else %}text-emerald-600{% endif %}">{{ p.days_left }}d</span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-900 truncate">{{ p.title }}</p>
-                            <p class="text-xs text-gray-500">{{ p.client }} &middot; &#8377;{{ p.budget|indian_number }}</p>
+                            <p class="text-xs text-gray-500">{{ p.client }} &middot; &#8377;{{ p.budget|float|indian_number }}</p>
                         </div>
                         <div class="text-right flex-shrink-0">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold {% if p.days_left <= 3 %}bg-red-100 text-red-700{% elif p.days_left <= 7 %}bg-amber-100 text-amber-700{% else %}bg-emerald-100 text-emerald-700{% endif %}">
                                 {% if p.days_left <= 3 %}Urgent{% elif p.days_left <= 7 %}Soon{% else %}On Track{% endif %}
                             </span>
-                            <p class="text-[11px] text-gray-400 mt-1">{% if p.deadline %}{{ p.deadline[8:10]|int }} {{ ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][p.deadline[5:7]|int - 1] }}{% endif %}</p>
+                            <p class="text-[11px] text-gray-400 mt-1">{{ p.deadline|indian_date }}</p>
                         </div>
                     </div>
                     {% endfor %}
@@ -246,9 +255,7 @@
                         <td class="py-3.5 px-3">
                             <p class="font-semibold text-gray-900">{{ p.title }}</p>
                             {% if p.priority == 'high' %}
-                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-red-500 uppercase"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>High Priority</span>
-                            {% elif p.priority == 'medium' %}
-                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 uppercase"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Medium</span>
+                            <span class="text-[10px] font-bold text-red-500 uppercase">High Priority</span>
                             {% endif %}
                         </td>
                         <td class="py-3.5 px-3 text-gray-600">{{ p.client }}</td>
@@ -266,33 +273,33 @@
                         </td>
                         <td class="py-3.5 px-3">
                             {% if p.hours_estimated and p.hours_estimated > 0 %}
-                            {% set pct = [((p.hours_logged / p.hours_estimated) * 100)|round|int, 100]|min %}
+                            {% set pct = ((p.hours_logged / p.hours_estimated) * 100)|round|int %}
                             <div class="flex items-center gap-2">
                                 <div class="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full rounded-full {% if pct >= 100 %}bg-emerald-500{% elif pct >= 70 %}bg-amber-500{% else %}bg-brand-500{% endif %}" style="width:{{ pct }}%"></div>
+                                    <div class="h-full rounded-full {% if pct >= 100 %}bg-emerald-500{% elif pct >= 70 %}bg-amber-500{% else %}bg-brand-500{% endif %}" style="width:{{ [pct,100]|min }}%"></div>
                                 </div>
-                                <span class="text-xs text-gray-500 font-medium" title="{{ p.hours_logged|int }}h / {{ p.hours_estimated|int }}h">{{ pct }}%</span>
+                                <span class="text-xs text-gray-500 font-medium">{{ pct }}%</span>
                             </div>
                             {% else %}
                             <span class="text-xs text-gray-400">—</span>
                             {% endif %}
                         </td>
-                        <td class="py-3.5 px-3 text-gray-600 text-sm">{% if p.deadline %}{{ p.deadline[8:10]|int }} {{ ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][p.deadline[5:7]|int - 1] }} {{ p.deadline[:4] }}{% else %}—{% endif %}</td>
-                        <td class="py-3.5 px-3 text-right font-semibold text-gray-900">&#8377;{{ p.budget|indian_number }}</td>
+                        <td class="py-3.5 px-3 text-gray-600 text-sm">{{ p.deadline|indian_date }}</td>
+                        <td class="py-3.5 px-3 text-right font-semibold text-gray-900">&#8377;{{ p.budget|float|indian_number }}</td>
                         <td class="py-3.5 px-3 text-right">
                             {% if p.status == 'active' %}
                             <div class="flex items-center justify-end gap-1">
-                                <button onclick="completeProject({{ p.id }})" title="Mark complete" class="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-600 transition-colors">
+                                <button onclick="completeProject({{ p.id }})" title="Mark Complete" class="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-600 transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 </button>
-                                <button onclick="deleteProject({{ p.id }}, '{{ p.title }}')" title="Cancel project" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                <button onclick="deleteProject({{ p.id }}, '{{ p.title }}')" title="Cancel Project" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>
                             {% elif p.status == 'completed' %}
-                            <span class="text-[10px] text-emerald-500 font-medium">Done</span>
+                            <span class="text-xs text-emerald-500">Done</span>
                             {% else %}
-                            <span class="text-[10px] text-gray-400">—</span>
+                            <span class="text-xs text-gray-400">—</span>
                             {% endif %}
                         </td>
                     </tr>

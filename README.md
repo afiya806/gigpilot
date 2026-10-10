@@ -89,7 +89,7 @@ gigpilot/
 
 1. **Hybrid AI**: Every agent works with AND without an API key. Rule-based fallbacks mean the app is fully functional even without LLM access. When Claude API is available, parsing quality jumps significantly.
 
-2. **India-first**: GST calculations (CGST/SGST/IGST), Indian tax slabs (FY 2025-26), Section 44ADA presumptive taxation, TDS rates under 194J/194C. Built for the 24M+ Indian freelancers.
+2. **India-first**: GST calculations (CGST/SGST/IGST), Indian tax slabs (FY 2026-27), Section 44ADA presumptive taxation, TDS rates under 194J/194C, lakh/crore number formatting. Built for the 24M+ Indian freelancers.
 
 3. **Agent Architecture**: Each agent is self-contained with its own system prompt, extraction logic, and output schema. Agents communicate through the dashboard (email parser feeds into deadline tracker).
 
@@ -104,7 +104,12 @@ gigpilot/
 | `/api/scan-contract` | POST | Scan contract for red flags |
 | `/api/estimate-tax` | POST | Calculate tax liability |
 | `/api/projects` | GET/POST | Manage projects |
+| `/api/projects/{id}` | PUT/DELETE | Update or cancel project |
+| `/api/projects/{id}/complete` | POST | Mark project completed |
+| `/api/projects/{id}/log-hours` | POST | Log hours worked |
+| `/api/email-to-project` | POST | Parse email + auto-create project |
 | `/api/dashboard` | GET | Get dashboard data |
+| `/api/analytics` | GET | Detailed analytics |
 | `/api/health` | GET | Health check |
 
 ## License

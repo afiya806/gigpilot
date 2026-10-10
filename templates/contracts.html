@@ -13,10 +13,6 @@
                 <p class="text-sm text-gray-500">Paste a freelance contract. AI highlights red flags and unfavorable clauses.</p>
             </div>
         </div>
-        <div class="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2">
-            <svg class="w-4 h-4 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <p class="text-xs text-amber-700"><strong>Not legal advice.</strong> This tool highlights common issues — it does not replace review by a qualified lawyer. Always consult a legal professional before signing.</p>
-        </div>
     </div>
 
     <!-- Sample Contracts -->
@@ -175,14 +171,13 @@ function renderScan(data) {
     document.getElementById('scanLoading').classList.add('hidden');
     const c = document.getElementById('scanContent');
 
-    // Use actual risk_score from backend (0-100)
-    const score = typeof data.risk_score === 'number' ? data.risk_score : (data.overall_risk === 'high' ? 85 : data.overall_risk === 'low' ? 20 : 50);
     const riskConfig = {
         high: { color: 'red', bg: 'from-red-500 to-rose-600', icon: '🔴', label: 'HIGH RISK' },
         medium: { color: 'amber', bg: 'from-amber-500 to-orange-500', icon: '🟡', label: 'MEDIUM RISK' },
         low: { color: 'green', bg: 'from-green-500 to-emerald-500', icon: '🟢', label: 'LOW RISK' }
     };
     const r = riskConfig[data.overall_risk] || riskConfig.medium;
+    const riskPercent = data.risk_score != null ? data.risk_score : (data.overall_risk === 'high' ? 85 : data.overall_risk === 'low' ? 20 : 50);
 
     let html = `
         <!-- Risk Meter -->
@@ -193,27 +188,14 @@ function renderScan(data) {
                     <p class="text-2xl font-extrabold mt-1">${r.icon} ${r.label}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-3xl font-black">${score}</p>
-                    <p class="text-xs text-white/70">/ 100 risk score</p>
+                    <p class="text-3xl font-black">${riskPercent}%</p>
+                    <p class="text-xs text-white/70">risk score</p>
                 </div>
             </div>
-            <div class="w-full bg-white/20 rounded-full h-2.5 mb-2">
-                <div class="h-2.5 rounded-full bg-white/90 transition-all duration-1000" style="width: ${score}%"></div>
+            <div class="w-full bg-white/20 rounded-full h-2 mb-2">
+                <div class="h-2 rounded-full bg-white/90 transition-all duration-1000" style="width: ${riskPercent}%"></div>
             </div>
         </div>
-
-        <!-- Contract Type & Negotiation Priority -->
-        ${data.contract_type || data.negotiation_priority ? `
-        <div class="grid grid-cols-2 gap-3 scale-in" style="animation-delay: 50ms">
-            ${data.contract_type ? `<div class="p-3.5 bg-gradient-to-br from-brand-50 to-white rounded-xl border border-brand-100">
-                <p class="text-[10px] uppercase tracking-wider text-brand-400 mb-1">Contract Type</p>
-                <p class="text-sm font-bold text-brand-700">${data.contract_type}</p>
-            </div>` : ''}
-            ${data.negotiation_priority ? `<div class="p-3.5 bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-100">
-                <p class="text-[10px] uppercase tracking-wider text-purple-400 mb-1">Negotiation Priority</p>
-                <p class="text-sm font-bold text-purple-700 capitalize">${data.negotiation_priority.replace('_', ' ')}</p>
-            </div>` : ''}
-        </div>` : ''}
 
         <!-- Summary -->
         <div class="p-4 bg-surface-50 rounded-xl border border-gray-100">
@@ -275,28 +257,21 @@ function renderScan(data) {
                 <div class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center">
                     <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                 </div>
-                <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wide">Missing Clauses (${data.missing_clauses.length})</h4>
+                <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wide">Missing Clauses</h4>
             </div>
-            <div class="space-y-2.5">${data.missing_clauses.map(m => {
-                // Handle both string and object formats
-                if (typeof m === 'string') {
-                    return `<div class="flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-                        <span class="text-sm text-amber-800">${m}</span>
-                    </div>`;
-                }
-                const impColor = { critical: 'red', recommended: 'amber', 'nice-to-have': 'gray' };
-                const ic = impColor[m.importance] || 'amber';
-                return `<div class="p-2.5 bg-white/60 rounded-lg">
-                    <div class="flex items-center justify-between mb-1">
-                        <span class="text-sm font-semibold text-amber-800">${m.clause}</span>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-${ic}-100 text-${ic}-700 font-bold uppercase">${m.importance}</span>
-                    </div>
-                    ${m.reason ? `<p class="text-xs text-gray-500">${m.reason}</p>` : ''}
-                </div>`;
-            }).join('')}</div>
+            <div class="space-y-2">${data.missing_clauses.map(m =>
+                `<div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
+                    <span class="text-sm text-amber-800">${m}</span>
+                </div>`
+            ).join('')}</div>
         </div>`;
     }
+
+    // Add disclaimer
+    html += `<div class="p-4 bg-gray-50 rounded-xl border border-gray-200 mt-4">
+        <p class="text-xs text-gray-500 leading-relaxed">⚠️ <strong>Disclaimer:</strong> This analysis is AI-generated and does not constitute legal advice. Always consult a qualified lawyer before signing any contract.</p>
+    </div>`;
 
     c.innerHTML = html;
     c.classList.remove('hidden');

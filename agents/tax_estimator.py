@@ -16,10 +16,7 @@ Enhanced with:
 from datetime import datetime
 
 
-# Indian income tax slabs for FY 2026-27 (Assessment Year 2027-28)
-# Rules last updated: July 2025 (Finance Act 2025)
-DISCLAIMER = "This is an estimate for planning purposes only — not tax advice. Consult a CA for filing."
-RULES_LAST_UPDATED = "July 2025 (Finance Act 2025)"
+# Indian income tax slabs for FY 2026-27
 
 # New Tax Regime (Default from FY 2024-25)
 NEW_REGIME_SLABS = [
@@ -163,8 +160,6 @@ class TaxEstimatorAgent:
             "gst_status": gst_status,
             "itr_form": itr_form,
             "tips": self._get_tips(gross_income, regime, primary["taxable_income"], expenses, use_presumptive),
-            "disclaimer": DISCLAIMER,
-            "rules_last_updated": RULES_LAST_UPDATED,
         }
         return result
 
@@ -262,7 +257,7 @@ class TaxEstimatorAgent:
         net_payable = max(0, total_tax - tds_paid)
 
         # Advance tax schedule
-        advance_tax = self._calculate_advance_tax(total_tax, tds_paid)
+        advance_tax = self._calculate_advance_tax(total_tax, tds_paid, use_presumptive)
 
         return {
             "gross_income": gross_income,
@@ -342,10 +337,21 @@ class TaxEstimatorAgent:
         # (Simplified marginal relief check)
         return round(surcharge)
 
-    def _calculate_advance_tax(self, total_tax: float, tds_paid: float) -> list:
+    def _calculate_advance_tax(self, total_tax: float, tds_paid: float, use_presumptive: bool = False) -> list:
         net = max(0, total_tax - tds_paid)
         if net < 10000:
             return [{"note": "No advance tax required (liability under ₹10,000)"}]
+
+        # Section 44ADA: single installment by March 15
+        if use_presumptive:
+            return [{
+                "quarter": "Full Year",
+                "due_date": "March 15",
+                "cumulative_amount": round(net),
+                "installment_amount": round(net),
+                "percent": 100,
+                "note": "Section 44ADA — entire advance tax due in single installment by March 15",
+            }]
 
         schedule = []
         prev_cumulative = 0
@@ -421,12 +427,6 @@ class TaxEstimatorAgent:
                     f"Under presumptive taxation, only 50% of ₹{gross:,.0f} = ₹{gross * 0.5:,.0f} is taxed — "
                     f"and you don't need to maintain books of accounts."
                 )
-        elif use_presumptive and gross > PRESUMPTIVE_LIMIT_44ADA:
-            tips.append(
-                f"⚠️ Your gross income (₹{gross:,.0f}) exceeds the Section 44ADA limit of ₹75 lakhs. "
-                f"Presumptive taxation does not apply — you must maintain books and get them audited. "
-                f"Regular computation will be used instead."
-            )
         elif use_presumptive:
             tips.append("✅ Using Section 44ADA — no books of accounts needed. File ITR-4 by July 31.")
 
