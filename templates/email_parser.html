@@ -365,11 +365,13 @@ async function addAsProject() {
                 deadline: d.deadline || '',
                 budget: parseFloat(d.budget) || 0,
                 currency: d.currency || 'INR',
+                hours_estimated: parseFloat(d.estimated_hours) || 0,
                 priority: d.priority || 'medium',
                 deliverables: d.deliverables || [],
+                notes: `Auto-created from email. Scope: ${d.scope || 'N/A'}`,
             })
         });
-        if (typeof showToast === 'function') showToast('Project added to dashboard!', 'success');
+        if (typeof showToast === 'function') showToast('Project added to dashboard! View it on the Dashboard page.', 'success');
     } catch(e) {
         if (typeof showToast === 'function') showToast('Error adding project', 'error');
     }

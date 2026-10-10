@@ -13,6 +13,10 @@
                 <p class="text-sm text-gray-500">Estimate advance tax, track TDS, and plan quarterly payments (Indian tax system).</p>
             </div>
         </div>
+        <div class="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2">
+            <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-xs text-amber-700"><strong>Estimate only — not tax advice.</strong> Consult a Chartered Accountant before filing. Rules last updated: July 2025 (Finance Act 2025).</p>
+        </div>
     </div>
 
     <!-- Quick Presets -->
@@ -39,7 +43,7 @@
                     <div class="w-7 h-7 rounded-lg bg-brand-100 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Income Details (FY 2025-26)</h3>
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Income Details (FY 2026-27)</h3>
                 </div>
                 <div class="space-y-4">
                     <div>
@@ -70,7 +74,7 @@
                                 <input type="radio" name="regime" value="new" checked class="peer sr-only" onchange="toggleRegime()">
                                 <div class="p-3 rounded-xl border-2 border-gray-200 text-center peer-checked:border-brand-500 peer-checked:bg-brand-50 transition-all">
                                     <p class="text-sm font-semibold text-gray-900">New Regime</p>
-                                    <p class="text-[10px] text-gray-400 mt-0.5">Default FY 25-26</p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5">Default FY 26-27</p>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
@@ -141,6 +145,10 @@
 function toggleRegime() {
     const regime = document.querySelector('input[name=regime]:checked').value;
     document.getElementById('oldRegimeFields').classList.toggle('hidden', regime !== 'old');
+    if (regime === 'new') {
+        const c = document.getElementById('ded80c'); if (c) c.value = 0;
+        const d = document.getElementById('ded80d'); if (d) d.value = 0;
+    }
 }
 
 function loadPreset(income, expenses, tds, regime) {

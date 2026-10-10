@@ -32,6 +32,31 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+
+def indian_number(value):
+    """Format number with Indian lakh/crore grouping: 6,65,000 instead of 665,000."""
+    try:
+        value = int(float(value))
+    except (ValueError, TypeError):
+        return str(value)
+    if value < 0:
+        return "-" + indian_number(-value)
+    s = str(value)
+    if len(s) <= 3:
+        return s
+    last3 = s[-3:]
+    rest = s[:-3]
+    # Group the remaining digits in pairs from right
+    groups = []
+    while rest:
+        groups.append(rest[-2:])
+        rest = rest[:-2]
+    groups.reverse()
+    return ",".join(groups) + "," + last3
+
+
+templates.env.filters["indian_number"] = indian_number
+
 # Initialize agents
 email_agent = EmailParserAgent()
 invoice_agent = InvoiceGeneratorAgent()

@@ -16,7 +16,10 @@ Enhanced with:
 from datetime import datetime
 
 
-# Indian income tax slabs for FY 2025-26
+# Indian income tax slabs for FY 2026-27 (Assessment Year 2027-28)
+# Rules last updated: July 2025 (Finance Act 2025)
+DISCLAIMER = "This is an estimate for planning purposes only — not tax advice. Consult a CA for filing."
+RULES_LAST_UPDATED = "July 2025 (Finance Act 2025)"
 
 # New Tax Regime (Default from FY 2024-25)
 NEW_REGIME_SLABS = [
@@ -160,6 +163,8 @@ class TaxEstimatorAgent:
             "gst_status": gst_status,
             "itr_form": itr_form,
             "tips": self._get_tips(gross_income, regime, primary["taxable_income"], expenses, use_presumptive),
+            "disclaimer": DISCLAIMER,
+            "rules_last_updated": RULES_LAST_UPDATED,
         }
         return result
 
@@ -416,6 +421,12 @@ class TaxEstimatorAgent:
                     f"Under presumptive taxation, only 50% of ₹{gross:,.0f} = ₹{gross * 0.5:,.0f} is taxed — "
                     f"and you don't need to maintain books of accounts."
                 )
+        elif use_presumptive and gross > PRESUMPTIVE_LIMIT_44ADA:
+            tips.append(
+                f"⚠️ Your gross income (₹{gross:,.0f}) exceeds the Section 44ADA limit of ₹75 lakhs. "
+                f"Presumptive taxation does not apply — you must maintain books and get them audited. "
+                f"Regular computation will be used instead."
+            )
         elif use_presumptive:
             tips.append("✅ Using Section 44ADA — no books of accounts needed. File ITR-4 by July 31.")
 

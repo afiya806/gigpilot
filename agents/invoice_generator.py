@@ -115,25 +115,36 @@ class InvoiceGeneratorAgent:
             ])
 
         # GST calculations
-        gst_rate = float(data.get("gst_rate", 18))
+        gst_registered = data.get("gst_registered", True)
+        gst_rate = float(data.get("gst_rate", 18)) if gst_registered else 0
         is_igst = data.get("is_igst", False)
-
-        if is_igst:
-            igst = subtotal * gst_rate / 100
-            total = subtotal + igst
-            table_data.append(["", "", "", "", Paragraph("<b>Subtotal</b>", bold_style), f"{subtotal:,.2f}"])
-            table_data.append(["", "", "", "", Paragraph(f"<b>IGST ({gst_rate}%)</b>", bold_style), f"{igst:,.2f}"])
-        else:
-            half_rate = gst_rate / 2
-            cgst = subtotal * half_rate / 100
-            sgst = subtotal * half_rate / 100
-            total = subtotal + cgst + sgst
-            table_data.append(["", "", "", "", Paragraph("<b>Subtotal</b>", bold_style), f"{subtotal:,.2f}"])
-            table_data.append(["", "", "", "", Paragraph(f"<b>CGST ({half_rate}%)</b>", bold_style), f"{cgst:,.2f}"])
-            table_data.append(["", "", "", "", Paragraph(f"<b>SGST ({half_rate}%)</b>", bold_style), f"{sgst:,.2f}"])
-
         currency = data.get("currency", "INR")
-        symbol = "₹" if currency == "INR" else "$" if currency == "USD" else currency + " "
+        symbol = "₹" if currency == "INR" else "$" if currency == "USD" else "€" if currency == "EUR" else currency + " "
+        is_export = currency in ("USD", "EUR")
+
+        table_data.append(["", "", "", "", Paragraph("<b>Subtotal</b>", bold_style), f"{subtotal:,.2f}"])
+
+        if gst_rate > 0 and gst_registered:
+            if is_igst:
+                igst = subtotal * gst_rate / 100
+                total = subtotal + igst
+                table_data.append(["", "", "", "", Paragraph(f"<b>IGST ({gst_rate}%)</b>", bold_style), f"{igst:,.2f}"])
+            else:
+                half_rate = gst_rate / 2
+                cgst = subtotal * half_rate / 100
+                sgst = subtotal * half_rate / 100
+                total = subtotal + cgst + sgst
+                table_data.append(["", "", "", "", Paragraph(f"<b>CGST ({half_rate}%)</b>", bold_style), f"{cgst:,.2f}"])
+                table_data.append(["", "", "", "", Paragraph(f"<b>SGST ({half_rate}%)</b>", bold_style), f"{sgst:,.2f}"])
+        else:
+            total = subtotal
+            if is_export:
+                table_data.append(["", "", "", "", Paragraph("<b>GST</b>", small_style),
+                                   Paragraph("Zero-rated (Export under LUT)", small_style)])
+            elif not gst_registered:
+                table_data.append(["", "", "", "", Paragraph("<b>GST</b>", small_style),
+                                   Paragraph("N/A (Not GST registered)", small_style)])
+
         table_data.append(["", "", "", "", Paragraph(f"<b>Total ({currency})</b>", bold_style),
                            Paragraph(f"<b>{symbol}{total:,.2f}</b>", bold_style)])
 

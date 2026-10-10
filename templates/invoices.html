@@ -93,27 +93,42 @@
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Tax Settings</h3>
                         </div>
                         <div class="space-y-3">
-                            <div>
-                                <label class="text-xs text-gray-500 font-medium">GST Rate (%)</label>
-                                <select name="gst_rate" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm mt-1 bg-surface-50 focus:bg-white transition-colors">
-                                    <option value="0">0% (Exempt)</option>
-                                    <option value="5">5%</option>
-                                    <option value="12">12%</option>
-                                    <option value="18" selected>18%</option>
-                                    <option value="28">28%</option>
-                                </select>
-                            </div>
                             <label class="flex items-center gap-3 p-2.5 rounded-xl bg-surface-50 text-sm cursor-pointer hover:bg-surface-100 transition-colors">
-                                <input type="checkbox" name="is_igst" class="rounded border-gray-300 text-brand-600 focus:ring-brand-500">
-                                <span class="text-gray-700">Interstate supply (IGST)</span>
+                                <input type="checkbox" name="gst_registered" id="gstRegistered" checked class="rounded border-gray-300 text-brand-600 focus:ring-brand-500" onchange="toggleGstFields()">
+                                <div>
+                                    <span class="text-gray-700 font-medium">I'm GST-registered</span>
+                                    <p class="text-[10px] text-gray-400">Uncheck if you're below ₹20L threshold</p>
+                                </div>
                             </label>
+                            <div id="gstFields">
+                                <div>
+                                    <label class="text-xs text-gray-500 font-medium">GST Rate (%)</label>
+                                    <select name="gst_rate" id="gstRateSelect" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm mt-1 bg-surface-50 focus:bg-white transition-colors">
+                                        <option value="0">0% (Exempt / Zero-rated)</option>
+                                        <option value="5">5%</option>
+                                        <option value="12">12%</option>
+                                        <option value="18" selected>18%</option>
+                                        <option value="28">28%</option>
+                                    </select>
+                                </div>
+                                <label class="flex items-center gap-3 p-2.5 rounded-xl bg-surface-50 text-sm cursor-pointer hover:bg-surface-100 transition-colors mt-2">
+                                    <input type="checkbox" name="is_igst" class="rounded border-gray-300 text-brand-600 focus:ring-brand-500">
+                                    <span class="text-gray-700">Interstate supply (IGST)</span>
+                                </label>
+                            </div>
+                            <div id="gstNote" class="hidden p-2.5 rounded-xl bg-blue-50 border border-blue-100">
+                                <p class="text-[10px] text-blue-600">No GST will be charged. You can still generate invoices without GST.</p>
+                            </div>
                             <div>
                                 <label class="text-xs text-gray-500 font-medium">Currency</label>
-                                <select name="currency" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm mt-1 bg-surface-50 focus:bg-white transition-colors">
+                                <select name="currency" id="currencySelect" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm mt-1 bg-surface-50 focus:bg-white transition-colors" onchange="handleCurrencyChange()">
                                     <option value="INR" selected>🇮🇳 INR (₹)</option>
                                     <option value="USD">🇺🇸 USD ($)</option>
                                     <option value="EUR">🇪🇺 EUR (€)</option>
                                 </select>
+                            </div>
+                            <div id="exportNote" class="hidden p-2.5 rounded-xl bg-green-50 border border-green-100">
+                                <p class="text-[10px] text-green-700">Export invoice — GST set to 0% (zero-rated under LUT). No GST on overseas services.</p>
                             </div>
                         </div>
                     </div>
@@ -176,6 +191,42 @@
 </div>
 
 <script>
+function toggleGstFields() {
+    const checked = document.getElementById('gstRegistered').checked;
+    document.getElementById('gstFields').classList.toggle('hidden', !checked);
+    document.getElementById('gstNote').classList.toggle('hidden', checked);
+    if (!checked) {
+        document.getElementById('gstRateSelect').value = '0';
+    } else {
+        // Restore default based on currency
+        const currency = document.getElementById('currencySelect').value;
+        document.getElementById('gstRateSelect').value = (currency !== 'INR') ? '0' : '18';
+    }
+}
+
+function handleCurrencyChange() {
+    const currency = document.getElementById('currencySelect').value;
+    const exportNote = document.getElementById('exportNote');
+    const gstRate = document.getElementById('gstRateSelect');
+    const gstRegistered = document.getElementById('gstRegistered').checked;
+
+    if (currency !== 'INR') {
+        // Export: zero-rated under LUT
+        exportNote.classList.remove('hidden');
+        if (gstRegistered) gstRate.value = '0';
+    } else {
+        exportNote.classList.add('hidden');
+        if (gstRegistered) gstRate.value = '18';
+    }
+    updateSubtotal();
+}
+
+function validateGSTIN(gstin) {
+    if (!gstin) return true; // optional field
+    const pattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}Z[A-Z0-9]{1}$/;
+    return pattern.test(gstin.toUpperCase());
+}
+
 function addItem() {
     const row = document.createElement('div');
     row.className = 'item-row grid grid-cols-12 gap-2 mb-2 items-center scale-in';
@@ -227,17 +278,31 @@ async function generateInvoice() {
         return;
     }
 
+    const fromGstin = form.querySelector('[name=from_gstin]').value.trim();
+    const toGstin = form.querySelector('[name=to_gstin]').value.trim();
+    if (fromGstin && !validateGSTIN(fromGstin)) {
+        if (typeof showToast === 'function') showToast('Invalid your GSTIN format (expected: 22AAAAA0000A1Z5)', 'error');
+        return;
+    }
+    if (toGstin && !validateGSTIN(toGstin)) {
+        if (typeof showToast === 'function') showToast('Invalid client GSTIN format (expected: 22AAAAA0000A1Z5)', 'error');
+        return;
+    }
+
+    const gstRegistered = document.getElementById('gstRegistered').checked;
+
     const data = {
         from_name: form.querySelector('[name=from_name]').value,
         from_address: form.querySelector('[name=from_address]').value,
-        from_gstin: form.querySelector('[name=from_gstin]').value,
+        from_gstin: fromGstin,
         from_pan: form.querySelector('[name=from_pan]').value,
         to_name: form.querySelector('[name=to_name]').value,
         to_address: form.querySelector('[name=to_address]').value,
-        to_gstin: form.querySelector('[name=to_gstin]').value,
+        to_gstin: toGstin,
         items: items,
-        gst_rate: parseFloat(form.querySelector('[name=gst_rate]').value),
-        is_igst: form.querySelector('[name=is_igst]').checked,
+        gst_registered: gstRegistered,
+        gst_rate: gstRegistered ? parseFloat(form.querySelector('[name=gst_rate]').value) : 0,
+        is_igst: gstRegistered ? form.querySelector('[name=is_igst]').checked : false,
         currency: form.querySelector('[name=currency]').value,
         notes: form.querySelector('[name=notes]').value,
         bank_details: {
