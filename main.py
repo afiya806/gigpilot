@@ -1,4 +1,12 @@
-"""GigPilot: AI-Powered Freelancer Copilot - FastAPI Backend"""
+"""GigPilot: AI-Powered Freelancer Copilot - FastAPI Backend
+
+5 AI Agents:
+1. Email Parser — extracts scope, budget, deadlines from client emails
+2. Invoice Generator — GST-compliant Indian invoice PDFs
+3. Contract Scanner — red flag detection with risk scoring
+4. Tax Estimator — advance tax, regime comparison, GST check
+5. Deadline Tracker — project management with workload analytics
+"""
 
 import os
 import json
@@ -14,7 +22,11 @@ from agents.contract_scanner import ContractScannerAgent
 from agents.tax_estimator import TaxEstimatorAgent
 from agents.deadline_tracker import DeadlineTrackerAgent
 
-app = FastAPI(title="GigPilot", description="AI-Powered Freelancer Copilot")
+app = FastAPI(
+    title="GigPilot",
+    description="AI-Powered Freelancer Back-Office Copilot — 5 specialized AI agents for Indian freelancers",
+    version="2.0.0",
+)
 
 # Static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -121,9 +133,77 @@ async def log_hours(project_id: int, request: Request):
     return JSONResponse(result)
 
 
+# ============ NEW: Inter-Agent Features ============
+
+@app.post("/api/email-to-project")
+async def email_to_project(request: Request):
+    """Parse an email AND auto-create a project from it (Email Agent → Deadline Agent)."""
+    body = await request.json()
+    email_text = body.get("email_text", "")
+    if not email_text.strip():
+        return JSONResponse({"error": "Email text is required"}, status_code=400)
+
+    # Step 1: Parse the email
+    parsed = email_agent.parse(email_text)
+
+    # Step 2: Create a project from parsed data
+    project_data = {
+        "client": parsed.get("client_name", "Unknown"),
+        "title": parsed.get("project_title", "New Project"),
+        "status": "active",
+        "deadline": parsed.get("deadline", ""),
+        "budget": float(parsed.get("budget", 0) or 0),
+        "currency": parsed.get("currency", "INR"),
+        "hours_estimated": float(parsed.get("estimated_hours", 0) or 0),
+        "hours_logged": 0,
+        "deliverables": parsed.get("deliverables", []),
+        "priority": parsed.get("priority", "medium"),
+        "notes": f"Auto-created from email. Scope: {parsed.get('scope', 'N/A')}",
+    }
+    project = deadline_agent.add_project(project_data)
+
+    return JSONResponse({
+        "parsed_email": parsed,
+        "created_project": project,
+        "message": f"Project '{project['title']}' created successfully from email",
+    })
+
+
+@app.get("/api/analytics")
+async def get_analytics():
+    """Detailed analytics from the Deadline Tracker Agent."""
+    return JSONResponse(deadline_agent.get_analytics())
+
+
+@app.delete("/api/projects/{project_id}")
+async def delete_project(project_id: int):
+    """Delete a project by marking it as cancelled."""
+    result = deadline_agent.update_project(project_id, {"status": "cancelled"})
+    return JSONResponse(result)
+
+
+@app.post("/api/projects/{project_id}/complete")
+async def complete_project(project_id: int):
+    """Mark a project as completed."""
+    result = deadline_agent.update_project(project_id, {"status": "completed"})
+    return JSONResponse(result)
+
+
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "service": "GigPilot", "version": "1.0.0"}
+    return {
+        "status": "ok",
+        "service": "GigPilot",
+        "version": "2.0.0",
+        "agents": {
+            "email_parser": "active",
+            "invoice_generator": "active",
+            "contract_scanner": "active",
+            "tax_estimator": "active",
+            "deadline_tracker": "active",
+        },
+        "timestamp": datetime.now().isoformat(),
+    }
 
 
 if __name__ == "__main__":

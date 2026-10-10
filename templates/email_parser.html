@@ -2,17 +2,45 @@
 {% block title %}Email Parser - GigPilot{% endblock %}
 {% block content %}
 <div class="fade-in">
+    <!-- Page Header -->
     <div class="mb-8">
-        <h2 class="text-2xl font-bold text-surface-900">Email Parser Agent</h2>
-        <p class="text-sm text-gray-500 mt-1">Paste a client email. AI extracts scope, deadlines, deliverables, and red flags.</p>
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-surface-900">Email Parser Agent</h2>
+                <p class="text-sm text-gray-500">Paste a client email. AI extracts scope, deadlines, deliverables, and red flags.</p>
+            </div>
+        </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-6">
+    <!-- Sample Emails -->
+    <div class="mb-6">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Try a sample email</p>
+        <div class="flex flex-wrap gap-2">
+            <button onclick="loadSample('ecommerce')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors border border-brand-100">
+                🛒 E-Commerce Project
+            </button>
+            <button onclick="loadSample('mobile')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors border border-purple-100">
+                📱 Mobile App Inquiry
+            </button>
+            <button onclick="loadSample('urgent')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition-colors border border-red-100">
+                🚨 Urgent Fix Request
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Input -->
         <div>
-            <div class="bg-white rounded-xl border border-gray-100 p-5">
-                <label class="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">Client Email</label>
-                <textarea id="emailInput" rows="16" class="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm resize-none leading-relaxed"
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Client Email</label>
+                    <span id="charCount" class="text-xs text-gray-400">0 chars</span>
+                </div>
+                <textarea id="emailInput" rows="18" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm resize-none leading-relaxed bg-surface-50 focus:bg-white transition-colors"
+                    oninput="document.getElementById('charCount').textContent = this.value.length + ' chars'"
                     placeholder="Hi, we're looking for a freelance developer to build our new e-commerce platform. Budget is around 2,00,000 INR. We need it done by March 15, 2026.
 
 Deliverables:
@@ -26,7 +54,7 @@ Let me know if you're interested.
 Thanks,
 Priya Sharma
 TechStart Solutions"></textarea>
-                <button id="parseBtn" onclick="parseEmail()" class="mt-4 w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors flex items-center justify-center gap-2">
+                <button id="parseBtn" onclick="parseEmail()" class="mt-4 w-full py-3 gradient-bg text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-500/25 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     Parse with AI
                 </button>
@@ -35,14 +63,25 @@ TechStart Solutions"></textarea>
 
         <!-- Output -->
         <div>
-            <div id="resultPanel" class="bg-white rounded-xl border border-gray-100 p-5 min-h-[480px]">
+            <div id="resultPanel" class="bg-white rounded-2xl border border-gray-100 p-6 min-h-[540px] shadow-sm">
                 <div id="emptyState" class="flex flex-col items-center justify-center h-96 text-gray-400">
-                    <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    <p class="text-sm">Paste an email and click Parse</p>
+                    <div class="w-20 h-20 rounded-2xl bg-surface-50 flex items-center justify-center mb-4 float">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <p class="text-sm font-medium">Paste an email and click Parse</p>
+                    <p class="text-xs text-gray-300 mt-1">AI will extract key project details</p>
                 </div>
                 <div id="loadingState" class="hidden flex flex-col items-center justify-center h-96">
-                    <div class="w-8 h-8 border-2 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-3"></div>
-                    <p class="text-sm text-gray-500">AI agent analyzing email...</p>
+                    <div class="relative">
+                        <div class="w-12 h-12 border-3 border-brand-100 rounded-full"></div>
+                        <div class="w-12 h-12 border-3 border-transparent border-t-brand-600 rounded-full animate-spin absolute inset-0"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4 font-medium">AI agent analyzing email...</p>
+                    <div class="flex gap-1 mt-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 0ms"></div>
+                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 150ms"></div>
+                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 300ms"></div>
+                    </div>
                 </div>
                 <div id="resultContent" class="hidden space-y-4"></div>
             </div>
@@ -51,13 +90,77 @@ TechStart Solutions"></textarea>
 </div>
 
 <script>
+const SAMPLES = {
+    ecommerce: `Hi,
+
+We're looking for a freelance developer to build our new e-commerce platform. Budget is around 2,00,000 INR. We need it done by March 15, 2026.
+
+Deliverables:
+- Homepage redesign
+- Product catalog with search and filters
+- Checkout and payment integration (Razorpay)
+- Admin dashboard for inventory management
+
+We'd prefer React for the frontend and Node.js for the backend. Let me know if you're interested and we can set up a call this week.
+
+Thanks,
+Priya Sharma
+TechStart Solutions`,
+
+    mobile: `Hello,
+
+I run a fitness startup called FitTrack and we need a mobile app built for both iOS and Android. The app should track workouts, show progress charts, and integrate with wearables.
+
+Budget: We can go up to $5,000 USD for an MVP.
+Timeline: We want to launch by June 2026.
+
+Key features:
+- User authentication
+- Workout logging with timer
+- Progress dashboard with charts
+- Apple Health / Google Fit integration
+- Push notifications for reminders
+
+We already have Figma designs ready. Looking forward to your proposal.
+
+Best,
+Rahul Mehta
+FitTrack Health Pvt Ltd`,
+
+    urgent: `URGENT - Website is down!
+
+Our production website has been throwing 500 errors since this morning. We think something broke after last night's deployment. Need someone to look at it ASAP.
+
+We're running Django on AWS EC2. The error logs show database connection timeouts.
+
+Budget is not a concern right now - we're losing around 50,000 INR per hour in sales. Can you start immediately?
+
+Please call me at your earliest.
+
+Vikram Patel
+QuickMart Online`
+};
+
+function loadSample(key) {
+    const textarea = document.getElementById('emailInput');
+    textarea.value = SAMPLES[key];
+    textarea.dispatchEvent(new Event('input'));
+    textarea.classList.add('ring-2', 'ring-brand-200');
+    setTimeout(() => textarea.classList.remove('ring-2', 'ring-brand-200'), 500);
+}
+
 async function parseEmail() {
     const text = document.getElementById('emailInput').value.trim();
-    if (!text) return;
+    if (!text) {
+        if (typeof showToast === 'function') showToast('Please paste an email first', 'error');
+        return;
+    }
 
     document.getElementById('emptyState').classList.add('hidden');
     document.getElementById('resultContent').classList.add('hidden');
     document.getElementById('loadingState').classList.remove('hidden');
+    document.getElementById('parseBtn').disabled = true;
+    document.getElementById('parseBtn').innerHTML = '<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Analyzing...';
 
     try {
         const res = await fetch('/api/parse-email', {
@@ -67,72 +170,180 @@ async function parseEmail() {
         });
         const data = await res.json();
         renderResult(data);
+        if (typeof showToast === 'function') showToast('Email parsed successfully!', 'success');
     } catch(e) {
         document.getElementById('loadingState').classList.add('hidden');
-        document.getElementById('resultContent').innerHTML = '<p class="text-red-500 text-sm">Error parsing email. Please try again.</p>';
+        document.getElementById('resultContent').innerHTML = `
+            <div class="flex flex-col items-center justify-center h-64 text-red-400">
+                <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <p class="text-sm font-medium">Error parsing email</p>
+                <p class="text-xs mt-1">Please try again</p>
+            </div>`;
         document.getElementById('resultContent').classList.remove('hidden');
     }
+
+    document.getElementById('parseBtn').disabled = false;
+    document.getElementById('parseBtn').innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Parse with AI';
 }
 
 function renderResult(data) {
     document.getElementById('loadingState').classList.add('hidden');
     const c = document.getElementById('resultContent');
 
-    let priorityColor = data.priority === 'high' ? 'red' : data.priority === 'medium' ? 'amber' : 'green';
+    const priorityConfig = {
+        high: { color: 'red', icon: '🔴', label: 'High Priority' },
+        medium: { color: 'amber', icon: '🟡', label: 'Medium Priority' },
+        low: { color: 'green', icon: '🟢', label: 'Low Priority' }
+    };
+    const p = priorityConfig[data.priority] || priorityConfig.medium;
 
     let html = `
-        <div class="flex items-center justify-between mb-2">
-            <h3 class="text-sm font-semibold text-gray-900">Extracted Information</h3>
-            <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-${priorityColor}-100 text-${priorityColor}-700">${data.priority} priority</span>
+        <div class="flex items-center justify-between mb-4 slide-in-left">
+            <h3 class="text-sm font-bold text-gray-900">Extracted Information</h3>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-${p.color}-100 text-${p.color}-700 flex items-center gap-1.5">
+                <span>${p.icon}</span> ${p.label}
+            </span>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-            <div class="p-3 bg-surface-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Client</p>
-                <p class="text-sm font-medium text-gray-900">${data.client_name || 'Unknown'}</p>
+        <div class="grid grid-cols-2 gap-3 scale-in">
+            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Client</p>
+                <p class="text-sm font-semibold text-gray-900">${data.client_name || 'Unknown'}</p>
             </div>
-            <div class="p-3 bg-surface-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Budget</p>
-                <p class="text-sm font-medium text-gray-900">${data.budget ? (data.currency === 'INR' ? '₹' : '$') + Number(data.budget).toLocaleString() : 'Not specified'}</p>
+            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Budget</p>
+                <p class="text-sm font-semibold text-gray-900">${data.budget ? (data.currency === 'INR' ? '₹' : '$') + Number(data.budget).toLocaleString('en-IN') : 'Not specified'}</p>
             </div>
-            <div class="p-3 bg-surface-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Deadline</p>
-                <p class="text-sm font-medium text-gray-900">${data.deadline || 'Not specified'}</p>
+            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Deadline</p>
+                <p class="text-sm font-semibold text-gray-900">${data.deadline || 'Not specified'}</p>
             </div>
-            <div class="p-3 bg-surface-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">Project</p>
-                <p class="text-sm font-medium text-gray-900">${data.project_title || 'Untitled'}</p>
+            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Project</p>
+                <p class="text-sm font-semibold text-gray-900">${data.project_title || 'Untitled'}</p>
             </div>
         </div>
 
-        <div class="p-3 bg-surface-50 rounded-lg">
-            <p class="text-xs text-gray-500 mb-1">Scope</p>
-            <p class="text-sm text-gray-800">${data.scope || 'See email for details'}</p>
+        <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Scope</p>
+            <p class="text-sm text-gray-700 leading-relaxed">${data.scope || 'See email for details'}</p>
         </div>
     `;
 
+    // New: Project Intelligence Row
+    const hasProjectType = data.project_type && data.project_type !== 'General';
+    const hasEstHours = data.estimated_hours && data.estimated_hours > 0;
+    const hasSentiment = data.client_sentiment;
+    if (hasProjectType || hasEstHours || hasSentiment) {
+        html += `<div class="grid grid-cols-3 gap-3 scale-in" style="animation-delay: 100ms">`;
+        if (hasProjectType) {
+            html += `<div class="p-3 bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-100 text-center">
+                <p class="text-[10px] uppercase tracking-wider text-purple-400 mb-1">Project Type</p>
+                <p class="text-xs font-bold text-purple-700">${data.project_type}</p>
+            </div>`;
+        }
+        if (hasEstHours) {
+            html += `<div class="p-3 bg-gradient-to-br from-blue-50 to-white rounded-xl border border-blue-100 text-center">
+                <p class="text-[10px] uppercase tracking-wider text-blue-400 mb-1">Est. Hours</p>
+                <p class="text-xs font-bold text-blue-700">${data.estimated_hours}h</p>
+            </div>`;
+        }
+        if (hasSentiment) {
+            const sentimentIcon = { positive: '😊', neutral: '😐', negative: '😟', urgent: '🚨' };
+            const sentimentColor = { positive: 'green', neutral: 'gray', negative: 'red', urgent: 'orange' };
+            const si = sentimentIcon[data.client_sentiment] || '😐';
+            const sc = sentimentColor[data.client_sentiment] || 'gray';
+            html += `<div class="p-3 bg-gradient-to-br from-${sc}-50 to-white rounded-xl border border-${sc}-100 text-center">
+                <p class="text-[10px] uppercase tracking-wider text-${sc}-400 mb-1">Sentiment</p>
+                <p class="text-xs font-bold text-${sc}-700">${si} ${data.client_sentiment}</p>
+            </div>`;
+        }
+        html += `</div>`;
+    }
+
+    // New: Tech Stack
+    if (data.tech_stack && data.tech_stack.length > 0) {
+        html += `<div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-2">Detected Tech Stack</p>
+            <div class="flex flex-wrap gap-1.5">${data.tech_stack.map(t =>
+                `<span class="px-2 py-1 rounded-lg bg-brand-50 text-brand-700 text-[11px] font-semibold border border-brand-100">${t}</span>`
+            ).join('')}</div>
+        </div>`;
+    }
+
     if (data.deliverables && data.deliverables.length > 0) {
-        html += `<div class="p-3 bg-surface-50 rounded-lg">
-            <p class="text-xs text-gray-500 mb-2">Deliverables</p>
-            <ul class="space-y-1">${data.deliverables.map(d => `<li class="text-sm text-gray-800 flex items-start gap-2"><svg class="w-4 h-4 text-brand-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${d}</li>`).join('')}</ul>
+        html += `<div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
+            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-2">Deliverables</p>
+            <div class="space-y-1.5">${data.deliverables.map(d => `
+                <div class="flex items-start gap-2">
+                    <div class="w-5 h-5 rounded-md bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-3 h-3 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span class="text-sm text-gray-700">${d}</span>
+                </div>`).join('')}</div>
         </div>`;
     }
 
     if (data.red_flags && data.red_flags.length > 0) {
-        html += `<div class="p-3 bg-red-50 rounded-lg border border-red-100">
-            <p class="text-xs text-red-600 font-medium mb-2">Red Flags</p>
-            <ul class="space-y-1">${data.red_flags.map(f => `<li class="text-sm text-red-700 flex items-start gap-2"><svg class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>${f}</li>`).join('')}</ul>
+        html += `<div class="p-3.5 bg-red-50/80 rounded-xl border border-red-100">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-5 h-5 rounded-md bg-red-100 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
+                </div>
+                <p class="text-xs font-bold text-red-600 uppercase tracking-wide">Red Flags</p>
+            </div>
+            <div class="space-y-1.5">${data.red_flags.map(f => `
+                <div class="flex items-start gap-2">
+                    <svg class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                    <span class="text-sm text-red-700">${f}</span>
+                </div>`).join('')}</div>
         </div>`;
     }
 
     if (data.action_items && data.action_items.length > 0) {
-        html += `<div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
-            <p class="text-xs text-blue-600 font-medium mb-2">Suggested Next Steps</p>
-            <ul class="space-y-1">${data.action_items.map(a => `<li class="text-sm text-blue-800">${a}</li>`).join('')}</ul>
+        html += `<div class="p-3.5 bg-blue-50/80 rounded-xl border border-blue-100">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-5 h-5 rounded-md bg-blue-100 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <p class="text-xs font-bold text-blue-600 uppercase tracking-wide">Suggested Next Steps</p>
+            </div>
+            <div class="space-y-1.5">${data.action_items.map((a, i) => `
+                <div class="flex items-start gap-2">
+                    <span class="w-5 h-5 rounded-md bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600 flex-shrink-0">${i+1}</span>
+                    <span class="text-sm text-blue-800">${a}</span>
+                </div>`).join('')}</div>
         </div>`;
     }
 
-    html += `<button onclick="addAsProject()" class="w-full py-2 bg-surface-900 text-white text-sm rounded-lg hover:bg-surface-800 transition-colors mt-2">
+    // New: Payment Terms & Follow-up
+    if (data.payment_terms || data.follow_up_needed) {
+        html += `<div class="grid grid-cols-2 gap-3">`;
+        if (data.payment_terms) {
+            html += `<div class="p-3 bg-gradient-to-br from-emerald-50 to-white rounded-xl border border-emerald-100">
+                <p class="text-[10px] uppercase tracking-wider text-emerald-400 mb-1">Payment Terms</p>
+                <p class="text-xs font-semibold text-emerald-700">${data.payment_terms}</p>
+            </div>`;
+        }
+        if (data.follow_up_needed !== undefined) {
+            html += `<div class="p-3 bg-gradient-to-br from-${data.follow_up_needed ? 'amber' : 'gray'}-50 to-white rounded-xl border border-${data.follow_up_needed ? 'amber' : 'gray'}-100">
+                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Follow-up</p>
+                <p class="text-xs font-semibold ${data.follow_up_needed ? 'text-amber-700' : 'text-gray-500'}">${data.follow_up_needed ? '📬 Follow-up needed' : '✓ No follow-up'}</p>
+            </div>`;
+        }
+        html += `</div>`;
+    }
+
+    // New: Suggested reply tone
+    if (data.suggested_reply_tone) {
+        html += `<div class="p-3 bg-gradient-to-br from-indigo-50 to-white rounded-xl border border-indigo-100 flex items-center gap-2">
+            <span class="text-[10px] uppercase tracking-wider text-indigo-400 font-semibold">Suggested Reply Tone:</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 capitalize">${data.suggested_reply_tone}</span>
+        </div>`;
+    }
+
+    html += `<button onclick="addAsProject()" class="w-full py-3 bg-surface-900 text-white text-sm font-semibold rounded-xl hover:bg-surface-800 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] hover:shadow-lg">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
         Add as Project to Dashboard
     </button>`;
 
@@ -144,20 +355,24 @@ function renderResult(data) {
 async function addAsProject() {
     const d = window._parsedData;
     if (!d) return;
-    await fetch('/api/projects', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-            title: d.project_title || 'New Project',
-            client: d.client_name || 'Unknown',
-            deadline: d.deadline || '',
-            budget: parseFloat(d.budget) || 0,
-            currency: d.currency || 'INR',
-            priority: d.priority || 'medium',
-            deliverables: d.deliverables || [],
-        })
-    });
-    alert('Project added to dashboard!');
+    try {
+        await fetch('/api/projects', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                title: d.project_title || 'New Project',
+                client: d.client_name || 'Unknown',
+                deadline: d.deadline || '',
+                budget: parseFloat(d.budget) || 0,
+                currency: d.currency || 'INR',
+                priority: d.priority || 'medium',
+                deliverables: d.deliverables || [],
+            })
+        });
+        if (typeof showToast === 'function') showToast('Project added to dashboard!', 'success');
+    } catch(e) {
+        if (typeof showToast === 'function') showToast('Error adding project', 'error');
+    }
 }
 </script>
 {% endblock %}

@@ -3,196 +3,343 @@
 {% block content %}
 <div class="fade-in">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-            <h2 class="text-2xl font-bold text-surface-900">Dashboard</h2>
-            <p class="text-sm text-gray-500 mt-1">Your freelance command center</p>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-surface-900">Dashboard</h2>
+            <p class="text-sm text-gray-500 mt-1">Your freelance command center — powered by 5 AI agents</p>
         </div>
         <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')"
-                class="px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors flex items-center gap-2">
+                class="px-5 py-2.5 gradient-bg text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 self-start sm:self-auto">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             New Project
         </button>
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-4 gap-5 mb-8">
-        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#3b82f6;--accent-to:#6366f1;">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Projects</span>
-                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active</span>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-surface-900" id="activeCount">{{ dashboard.total_active_projects }}</p>
+            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_active_projects }}</p>
+            <p class="text-xs text-gray-400 mt-1">projects in progress</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#10b981;--accent-to:#34d399;">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Completed</span>
-                <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Completed</span>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-surface-900">{{ dashboard.total_completed }}</p>
+            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_completed }}</p>
+            <p class="text-xs text-gray-400 mt-1">delivered &amp; paid</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#8b5cf6;--accent-to:#a855f7;">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Revenue</span>
-                <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Revenue</span>
+                <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-surface-900">&#8377;{{ "{:,.0f}".format(dashboard.total_active_revenue) }}</p>
+            <p class="text-3xl font-extrabold text-surface-900">&#8377;{{ "{:,.0f}".format(dashboard.total_active_revenue) }}</p>
+            <p class="text-xs text-gray-400 mt-1">active pipeline</p>
         </div>
-        <div class="bg-white rounded-xl p-5 border border-gray-100 card-hover">
+        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#f59e0b;--accent-to:#fbbf24;">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Hours Logged</span>
-                <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Hours</span>
+                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-surface-900">{{ dashboard.total_hours_logged }}</p>
+            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_hours_logged }}</p>
+            <p class="text-xs text-gray-400 mt-1">hours logged</p>
         </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-6">
+    <!-- Workload Health Banner -->
+    {% if dashboard.workload_health %}
+    <div class="mb-6 p-4 rounded-2xl border {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-50/70 border-emerald-200{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-50/70 border-amber-200{% else %}bg-red-50/70 border-red-200{% endif %}">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-100{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-100{% else %}bg-red-100{% endif %} flex items-center justify-center flex-shrink-0">
+                {% if dashboard.workload_health.status == 'healthy' %}
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {% elif dashboard.workload_health.status == 'moderate' %}
+                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                {% else %}
+                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {% endif %}
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold uppercase tracking-wide {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %}">
+                        Workload: {{ dashboard.workload_health.status|capitalize }}
+                    </span>
+                    <span class="text-xs font-bold px-1.5 py-0.5 rounded {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-200 text-emerald-800{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-200 text-amber-800{% else %}bg-red-200 text-red-800{% endif %}">{{ dashboard.workload_health.score }}/100</span>
+                </div>
+                <p class="text-xs {% if dashboard.workload_health.status == 'healthy' %}text-emerald-600{% elif dashboard.workload_health.status == 'moderate' %}text-amber-600{% else %}text-red-600{% endif %}">{{ dashboard.workload_health.message }}</p>
+            </div>
+            {% if dashboard.utilization_rate is defined %}
+            <div class="text-right flex-shrink-0 hidden sm:block">
+                <p class="text-xs font-semibold {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %}">{{ dashboard.utilization_rate }}%</p>
+                <p class="text-[10px] {% if dashboard.workload_health.status == 'healthy' %}text-emerald-500{% elif dashboard.workload_health.status == 'moderate' %}text-amber-500{% else %}text-red-500{% endif %}">Utilization</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        <a href="/email-parser" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-800">Parse Email</p>
+                <p class="text-[10px] text-gray-400">Extract scope &amp; budget</p>
+            </div>
+        </a>
+        <a href="/invoices" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/50 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-800">New Invoice</p>
+                <p class="text-[10px] text-gray-400">GST-compliant PDF</p>
+            </div>
+        </a>
+        <a href="/contracts" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-amber-200 hover:bg-amber-50/50 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-800">Scan Contract</p>
+                <p class="text-[10px] text-gray-400">Find red flags</p>
+            </div>
+        </a>
+        <a href="/tax" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-gray-800">Tax Estimate</p>
+                <p class="text-[10px] text-gray-400">Advance tax calc</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Overdue Projects -->
-        <div class="col-span-1">
-            <div class="bg-white rounded-xl border border-gray-100 p-5">
-                <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl border border-gray-100 p-5">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 pulse-dot"></span>
                     Overdue
+                    {% if dashboard.overdue_projects %}
+                    <span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-600">{{ dashboard.overdue_projects|length }}</span>
+                    {% endif %}
                 </h3>
                 {% if dashboard.overdue_projects %}
                     {% for p in dashboard.overdue_projects %}
-                    <div class="mb-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                        <p class="text-sm font-medium text-red-900">{{ p.title }}</p>
-                        <p class="text-xs text-red-600 mt-1">{{ p.client }} &middot; {{ p.days_left|abs }} days overdue</p>
+                    <div class="mb-3 p-3.5 bg-red-50/70 rounded-xl border border-red-100">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm font-semibold text-red-900">{{ p.title }}</p>
+                                <p class="text-xs text-red-600 mt-0.5">{{ p.client }}</p>
+                            </div>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-lg bg-red-200 text-red-800">{{ p.days_left|abs }}d late</span>
+                        </div>
+                        {% if p.hours_estimated and p.hours_estimated > 0 %}
+                        <div class="mt-2">
+                            <div class="flex justify-between text-[10px] text-red-500 mb-1">
+                                <span>{{ p.hours_logged }}h / {{ p.hours_estimated }}h</span>
+                                <span>{{ ((p.hours_logged / p.hours_estimated) * 100)|round|int }}%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-400 rounded-full" style="width:{{ [((p.hours_logged / p.hours_estimated) * 100)|round|int, 100]|min }}%"></div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-sm text-gray-400 italic">No overdue projects. Nice!</p>
+                    <div class="text-center py-8">
+                        <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">All caught up!</p>
+                        <p class="text-xs text-gray-400 mt-1">No overdue projects</p>
+                    </div>
                 {% endif %}
             </div>
         </div>
 
         <!-- Upcoming Deadlines -->
-        <div class="col-span-2">
-            <div class="bg-white rounded-xl border border-gray-100 p-5">
-                <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl border border-gray-100 p-5">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
                     Upcoming Deadlines
                 </h3>
                 {% if dashboard.upcoming_deadlines %}
                     <div class="space-y-3">
                     {% for p in dashboard.upcoming_deadlines %}
-                    <div class="flex items-center justify-between p-3 bg-surface-50 rounded-lg">
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">{{ p.title }}</p>
-                            <p class="text-xs text-gray-500">{{ p.client }}</p>
+                    <div class="flex items-center gap-4 p-3.5 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors group">
+                        <div class="w-10 h-10 rounded-xl {% if p.days_left <= 3 %}bg-red-100{% elif p.days_left <= 7 %}bg-amber-100{% else %}bg-emerald-100{% endif %} flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-bold {% if p.days_left <= 3 %}text-red-600{% elif p.days_left <= 7 %}text-amber-600{% else %}text-emerald-600{% endif %}">{{ p.days_left }}</span>
                         </div>
-                        <div class="text-right">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if p.days_left <= 3 %}bg-red-100 text-red-700{% elif p.days_left <= 7 %}bg-amber-100 text-amber-700{% else %}bg-green-100 text-green-700{% endif %}">
-                                {{ p.days_left }} days left
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-900 truncate">{{ p.title }}</p>
+                            <p class="text-xs text-gray-500">{{ p.client }} &middot; &#8377;{{ "{:,.0f}".format(p.budget|float) }}</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold {% if p.days_left <= 3 %}bg-red-100 text-red-700{% elif p.days_left <= 7 %}bg-amber-100 text-amber-700{% else %}bg-emerald-100 text-emerald-700{% endif %}">
+                                {% if p.days_left <= 3 %}Urgent{% elif p.days_left <= 7 %}Soon{% else %}On Track{% endif %}
                             </span>
-                            <p class="text-xs text-gray-400 mt-1">{{ p.deadline }}</p>
+                            <p class="text-[11px] text-gray-400 mt-1">{{ p.deadline }}</p>
                         </div>
                     </div>
                     {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-sm text-gray-400 italic">No upcoming deadlines. Add a project to get started.</p>
+                    <div class="text-center py-12">
+                        <div class="w-12 h-12 rounded-full bg-surface-100 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">No upcoming deadlines</p>
+                        <p class="text-xs text-gray-400 mt-1">Add a project to get started</p>
+                    </div>
                 {% endif %}
             </div>
         </div>
     </div>
 
     <!-- All Projects -->
-    <div class="mt-6 bg-white rounded-xl border border-gray-100 p-5">
-        <h3 class="text-sm font-semibold text-gray-900 mb-4">All Projects</h3>
+    <div class="mt-6 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="p-5 pb-0 flex items-center justify-between">
+            <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+                All Projects
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-surface-100 text-gray-500">{{ dashboard.projects|length }}</span>
+            </h3>
+        </div>
         {% if dashboard.projects %}
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto p-5">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-gray-100">
-                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Project</th>
-                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Client</th>
-                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase">Deadline</th>
-                        <th class="text-right py-3 px-2 text-xs font-medium text-gray-500 uppercase">Budget</th>
-                        <th class="text-right py-3 px-2 text-xs font-medium text-gray-500 uppercase">Hours</th>
+                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Project</th>
+                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Client</th>
+                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Progress</th>
+                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Deadline</th>
+                        <th class="text-right py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Budget</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in dashboard.projects %}
-                    <tr class="border-b border-gray-50 hover:bg-surface-50 transition-colors">
-                        <td class="py-3 px-2 font-medium text-gray-900">{{ p.title }}</td>
-                        <td class="py-3 px-2 text-gray-600">{{ p.client }}</td>
-                        <td class="py-3 px-2">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {% if p.status == 'active' %}bg-blue-50 text-blue-700{% elif p.status == 'completed' %}bg-green-50 text-green-700{% else %}bg-gray-100 text-gray-600{% endif %}">
-                                {{ p.status }}
+                    <tr class="table-row border-b border-gray-50 last:border-0">
+                        <td class="py-3.5 px-3">
+                            <p class="font-semibold text-gray-900">{{ p.title }}</p>
+                            {% if p.priority == 'high' %}
+                            <span class="text-[10px] font-bold text-red-500 uppercase">High Priority</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3.5 px-3 text-gray-600">{{ p.client }}</td>
+                        <td class="py-3.5 px-3">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold
+                                {% if p.status == 'active' %}bg-blue-50 text-blue-700
+                                {% elif p.status == 'completed' %}bg-emerald-50 text-emerald-700
+                                {% else %}bg-gray-100 text-gray-600{% endif %}">
+                                <span class="w-1.5 h-1.5 rounded-full
+                                    {% if p.status == 'active' %}bg-blue-500
+                                    {% elif p.status == 'completed' %}bg-emerald-500
+                                    {% else %}bg-gray-400{% endif %}"></span>
+                                {{ p.status|capitalize }}
                             </span>
                         </td>
-                        <td class="py-3 px-2 text-gray-600">{{ p.deadline or 'N/A' }}</td>
-                        <td class="py-3 px-2 text-right text-gray-900 font-medium">&#8377;{{ "{:,.0f}".format(p.budget|float) }}</td>
-                        <td class="py-3 px-2 text-right text-gray-600">{{ p.hours_logged }}h</td>
+                        <td class="py-3.5 px-3">
+                            {% if p.hours_estimated and p.hours_estimated > 0 %}
+                            {% set pct = ((p.hours_logged / p.hours_estimated) * 100)|round|int %}
+                            <div class="flex items-center gap-2">
+                                <div class="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full {% if pct >= 100 %}bg-emerald-500{% elif pct >= 70 %}bg-amber-500{% else %}bg-brand-500{% endif %}" style="width:{{ [pct,100]|min }}%"></div>
+                                </div>
+                                <span class="text-xs text-gray-500 font-medium">{{ pct }}%</span>
+                            </div>
+                            {% else %}
+                            <span class="text-xs text-gray-400">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3.5 px-3 text-gray-600 text-sm">{{ p.deadline or '—' }}</td>
+                        <td class="py-3.5 px-3 text-right font-semibold text-gray-900">&#8377;{{ "{:,.0f}".format(p.budget|float) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-        <div class="text-center py-12">
-            <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-            <p class="text-gray-500 text-sm">No projects yet. Parse a client email or add one manually.</p>
+        <div class="text-center py-16 px-5">
+            <div class="w-16 h-16 rounded-2xl bg-surface-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+            </div>
+            <p class="text-gray-600 font-semibold">No projects yet</p>
+            <p class="text-gray-400 text-sm mt-1">Parse a client email or add one manually to get started.</p>
+            <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')" class="mt-4 px-5 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all">
+                Add Your First Project
+            </button>
         </div>
         {% endif %}
     </div>
 </div>
 
 <!-- Add Project Modal -->
-<div id="addProjectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
-        <div class="flex items-center justify-between mb-5">
-            <h3 class="text-lg font-semibold text-gray-900">Add New Project</h3>
-            <button onclick="document.getElementById('addProjectModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
+<div id="addProjectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg scale-in overflow-hidden">
+        <div class="gradient-bg px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white">Add New Project</h3>
+                <button onclick="document.getElementById('addProjectModal').classList.add('hidden')" class="text-white/70 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
         </div>
-        <form id="addProjectForm" class="space-y-4">
+        <form id="addProjectForm" class="p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Project Title</label>
-                    <input name="title" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Website Redesign">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Project Title</label>
+                    <input name="title" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-brand-400" placeholder="Website Redesign">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Client</label>
-                    <input name="client" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Acme Corp">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Client</label>
+                    <input name="client" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-brand-400" placeholder="Acme Corp">
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Deadline</label>
-                    <input name="deadline" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Deadline</label>
+                    <input name="deadline" type="date" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Budget (INR)</label>
-                    <input name="budget" type="number" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="50000">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Budget (INR)</label>
+                    <input name="budget" type="number" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm" placeholder="50000">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Est. Hours</label>
-                    <input name="hours_estimated" type="number" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="40">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Est. Hours</label>
+                    <input name="hours_estimated" type="number" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm" placeholder="40">
                 </div>
             </div>
             <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1.5">Priority</label>
-                <select name="priority" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Priority</label>
+                <select name="priority" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm">
                     <option value="low">Low</option>
                     <option value="medium" selected>Medium</option>
                     <option value="high">High</option>
                 </select>
             </div>
-            <button type="submit" class="w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors">
+            <button type="submit" class="w-full py-3 gradient-bg text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-500/25">
                 Add Project
             </button>
         </form>
@@ -206,9 +353,14 @@ document.getElementById('addProjectForm').addEventListener('submit', async (e) =
     const data = Object.fromEntries(fd.entries());
     data.budget = parseFloat(data.budget) || 0;
     data.hours_estimated = parseFloat(data.hours_estimated) || 0;
-    await fetch('/api/projects', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-    document.getElementById('addProjectModal').classList.add('hidden');
-    location.reload();
+    try {
+        await fetch('/api/projects', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+        document.getElementById('addProjectModal').classList.add('hidden');
+        showToast('Project added successfully!', 'success');
+        setTimeout(() => location.reload(), 500);
+    } catch(e) {
+        showToast('Failed to add project', 'error');
+    }
 });
 </script>
 {% endblock %}
