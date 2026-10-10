@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Tax Helper - GigPilot{% endblock %}
 {% block content %}
-<div class="fade-in">
+<div class="fade-up">
     <!-- Page Header -->
     <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-surface-900">Tax Helper</h2>
-                <p class="text-sm text-gray-500">Estimate advance tax, track TDS, and plan quarterly payments (Indian tax system).</p>
-            </div>
-        </div>
+        <h2 class="text-2xl font-semibold text-neutral-900">Tax Helper</h2>
+        <p class="text-sm text-neutral-500 mt-1">Estimate advance tax, track TDS, and plan quarterly payments (Indian tax system).</p>
     </div>
 
     <!-- Quick Presets -->
     <div class="mb-6">
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Quick presets</p>
+        <p class="section-label mb-3">Quick presets</p>
         <div class="flex flex-wrap gap-2">
-            <button onclick="loadPreset(800000, 100000, 10000, 'new')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-100">
-                💚 Starter (₹8L)
+            <button onclick="loadPreset(800000, 100000, 10000, 'new')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-150 transition-colors border border-neutral-200 cursor-pointer">
+                Starter (8L)
             </button>
-            <button onclick="loadPreset(1500000, 250000, 75000, 'new')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors border border-brand-100">
-                💜 Mid-Level (₹15L)
+            <button onclick="loadPreset(1500000, 250000, 75000, 'new')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-150 transition-colors border border-neutral-200 cursor-pointer">
+                Mid-Level (15L)
             </button>
-            <button onclick="loadPreset(3000000, 500000, 200000, 'old')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors border border-amber-100">
-                🔶 Senior (₹30L)
+            <button onclick="loadPreset(3000000, 500000, 200000, 'old')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-150 transition-colors border border-neutral-200 cursor-pointer">
+                Senior (30L)
             </button>
         </div>
     </div>
@@ -34,79 +27,79 @@
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <!-- Input Form -->
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div class="card p-6">
                 <div class="flex items-center gap-2 mb-5">
-                    <div class="w-7 h-7 rounded-lg bg-brand-100 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Income Details (FY 2026-27)</h3>
+                    <h3 class="section-label">Income Details (FY 2026-27)</h3>
                 </div>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1.5">Gross Annual Income (INR)</label>
+                        <label class="block text-xs text-neutral-500 font-medium mb-1.5">Gross Annual Income (INR)</label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₹</span>
-                            <input id="grossIncome" type="number" class="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-surface-50 focus:bg-white transition-colors" placeholder="1200000" value="1200000">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">&#8377;</span>
+                            <input id="grossIncome" type="number" class="input w-full pl-8" placeholder="1200000" value="1200000">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1.5">Business Expenses (INR)</label>
+                        <label class="block text-xs text-neutral-500 font-medium mb-1.5">Business Expenses (INR)</label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₹</span>
-                            <input id="expenses" type="number" class="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-surface-50 focus:bg-white transition-colors" placeholder="200000" value="200000">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">&#8377;</span>
+                            <input id="expenses" type="number" class="input w-full pl-8" placeholder="200000" value="200000">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1.5">TDS Already Deducted (INR)</label>
+                        <label class="block text-xs text-neutral-500 font-medium mb-1.5">TDS Already Deducted (INR)</label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₹</span>
-                            <input id="tdsPaid" type="number" class="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-surface-50 focus:bg-white transition-colors" placeholder="50000" value="50000">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">&#8377;</span>
+                            <input id="tdsPaid" type="number" class="input w-full pl-8" placeholder="50000" value="50000">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 font-medium mb-1.5">Tax Regime</label>
+                        <label class="block text-xs text-neutral-500 font-medium mb-1.5">Tax Regime</label>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="regime" value="new" checked class="peer sr-only" onchange="toggleRegime()">
-                                <div class="p-3 rounded-xl border-2 border-gray-200 text-center peer-checked:border-brand-500 peer-checked:bg-brand-50 transition-all">
-                                    <p class="text-sm font-semibold text-gray-900">New Regime</p>
-                                    <p class="text-[10px] text-gray-400 mt-0.5">Default FY 26-27</p>
+                                <div class="p-3 rounded-lg border-2 border-neutral-200 text-center peer-checked:border-neutral-900 peer-checked:bg-neutral-50 transition-all">
+                                    <p class="text-sm font-semibold text-neutral-900">New Regime</p>
+                                    <p class="text-[10px] text-neutral-400 mt-0.5">Default FY 26-27</p>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="regime" value="old" class="peer sr-only" onchange="toggleRegime()">
-                                <div class="p-3 rounded-xl border-2 border-gray-200 text-center peer-checked:border-brand-500 peer-checked:bg-brand-50 transition-all">
-                                    <p class="text-sm font-semibold text-gray-900">Old Regime</p>
-                                    <p class="text-[10px] text-gray-400 mt-0.5">With deductions</p>
+                                <div class="p-3 rounded-lg border-2 border-neutral-200 text-center peer-checked:border-neutral-900 peer-checked:bg-neutral-50 transition-all">
+                                    <p class="text-sm font-semibold text-neutral-900">Old Regime</p>
+                                    <p class="text-[10px] text-neutral-400 mt-0.5">With deductions</p>
                                 </div>
                             </label>
                         </div>
                     </div>
-                    <div id="oldRegimeFields" class="hidden space-y-3 p-3 bg-surface-50 rounded-xl">
+                    <div id="oldRegimeFields" class="hidden space-y-3 p-3 bg-neutral-50 rounded-lg">
                         <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1.5">Section 80C Deductions</label>
+                            <label class="block text-xs text-neutral-500 font-medium mb-1.5">Section 80C Deductions</label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₹</span>
-                                <input id="ded80c" type="number" class="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white" placeholder="150000" value="0">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">&#8377;</span>
+                                <input id="ded80c" type="number" class="input w-full pl-8" placeholder="150000" value="0">
                             </div>
-                            <p class="text-[10px] text-gray-400 mt-1">PPF, ELSS, LIC, etc. (max ₹1.5L)</p>
+                            <p class="text-[10px] text-neutral-400 mt-1">PPF, ELSS, LIC, etc. (max 1.5L)</p>
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-500 font-medium mb-1.5">Health Insurance (80D)</label>
+                            <label class="block text-xs text-neutral-500 font-medium mb-1.5">Health Insurance (80D)</label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">₹</span>
-                                <input id="ded80d" type="number" class="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white" placeholder="25000" value="0">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">&#8377;</span>
+                                <input id="ded80d" type="number" class="input w-full pl-8" placeholder="25000" value="0">
                             </div>
                         </div>
                     </div>
-                    <label class="flex items-center gap-3 p-3 rounded-xl bg-surface-50 text-sm cursor-pointer hover:bg-surface-100 transition-colors">
-                        <input type="checkbox" id="presumptive" class="rounded border-gray-300 text-brand-600 focus:ring-brand-500" onchange="toggle44ADA()">
+                    <label class="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 text-sm cursor-pointer hover:bg-neutral-75 transition-colors">
+                        <input type="checkbox" id="presumptive" class="rounded border-neutral-300 text-neutral-900" onchange="toggle44ADA()">
                         <div>
-                            <span class="text-gray-700 font-medium">Use Presumptive Taxation (44ADA)</span>
-                            <p class="text-[10px] text-gray-400 mt-0.5">50% of gross income treated as profit</p>
+                            <span class="text-neutral-700 font-medium">Use Presumptive Taxation (44ADA)</span>
+                            <p class="text-[10px] text-neutral-400 mt-0.5">50% of gross income treated as profit</p>
                         </div>
                     </label>
-                    <button onclick="estimateTax()" id="taxBtn" class="w-full py-3 gradient-bg text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-500/25 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                    <button onclick="estimateTax()" id="taxBtn" class="w-full btn-primary py-3 text-sm flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                         Calculate Tax
                     </button>
@@ -117,19 +110,16 @@
         <!-- Results -->
         <div class="lg:col-span-3">
             <div id="taxResult" class="space-y-5">
-                <div id="taxEmpty" class="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center min-h-[400px] text-gray-400 shadow-sm">
-                    <div class="w-20 h-20 rounded-2xl bg-surface-50 flex items-center justify-center mb-4 float">
+                <div id="taxEmpty" class="card p-6 flex flex-col items-center justify-center min-h-[400px] text-neutral-400">
+                    <div class="w-20 h-20 rounded-xl bg-neutral-75 flex items-center justify-center mb-4">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                     </div>
                     <p class="text-sm font-medium">Enter your income details and calculate</p>
-                    <p class="text-xs text-gray-300 mt-1">Get tax estimates with advance tax schedule</p>
+                    <p class="text-xs text-neutral-300 mt-1">Get tax estimates with advance tax schedule</p>
                 </div>
-                <div id="taxLoading" class="hidden bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
-                    <div class="relative">
-                        <div class="w-12 h-12 border-3 border-brand-100 rounded-full"></div>
-                        <div class="w-12 h-12 border-3 border-transparent border-t-brand-600 rounded-full animate-spin absolute inset-0"></div>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-4 font-medium">Computing tax estimates...</p>
+                <div id="taxLoading" class="hidden card p-6 flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="spinner"></div>
+                    <p class="text-sm text-neutral-500 mt-4 font-medium">Computing tax estimates...</p>
                 </div>
                 <div id="taxContent" class="hidden space-y-5"></div>
             </div>
@@ -149,7 +139,7 @@ function toggle44ADA() {
     expInput.disabled = on;
     if (on) {
         expInput.classList.add('opacity-50', 'cursor-not-allowed');
-        expInput.parentElement.parentElement.querySelector('label').innerHTML = 'Business Expenses (INR) <span class="text-brand-600 font-normal">— ignored under 44ADA</span>';
+        expInput.parentElement.parentElement.querySelector('label').innerHTML = 'Business Expenses (INR) <span class="text-neutral-500 font-normal">(ignored under 44ADA)</span>';
     } else {
         expInput.classList.remove('opacity-50', 'cursor-not-allowed');
         expInput.parentElement.parentElement.querySelector('label').textContent = 'Business Expenses (INR)';
@@ -184,7 +174,7 @@ async function estimateTax() {
     document.getElementById('taxContent').classList.add('hidden');
     document.getElementById('taxLoading').classList.remove('hidden');
     document.getElementById('taxBtn').disabled = true;
-    document.getElementById('taxBtn').innerHTML = '<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Computing...';
+    document.getElementById('taxBtn').innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-color:rgba(255,255,255,0.3);border-top-color:#fff;"></div> Computing...';
 
     try {
         const res = await fetch('/api/estimate-tax', {
@@ -215,118 +205,118 @@ function renderTax(d) {
 
     let html = `
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 scale-in">
-            <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm" style="--accent: #6366f1; --accent-light: #818cf8">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Taxable Income</p>
-                <p class="text-2xl font-extrabold text-gray-900 mt-2">${fmt(d.taxable_income)}</p>
-                <p class="text-xs text-gray-400 mt-1">${d.computation_method}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 fade-up">
+            <div class="card p-5">
+                <p class="section-label">Taxable Income</p>
+                <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">${fmt(d.taxable_income)}</p>
+                <p class="text-xs text-neutral-400 mt-1">${d.computation_method}</p>
             </div>
-            <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5 shadow-sm" style="--accent: #f59e0b; --accent-light: #fbbf24">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Total Tax</p>
-                <p class="text-2xl font-extrabold text-gray-900 mt-2">${fmt(d.total_tax_liability)}</p>
+            <div class="card p-5">
+                <p class="section-label">Total Tax</p>
+                <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">${fmt(d.total_tax_liability)}</p>
                 <div class="flex items-center gap-2 mt-1">
-                    <span class="text-xs text-gray-400">${d.regime} Regime</span>
-                    <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-${rateColor}-100 text-${rateColor}-700">${d.effective_tax_rate}%</span>
+                    <span class="text-xs text-neutral-400">${d.regime} Regime</span>
+                    <span class="tag bg-${rateColor}-100 text-${rateColor}-700">${d.effective_tax_rate}%</span>
                 </div>
             </div>
-            <div class="stat-card bg-white rounded-2xl border border-purple-100 p-5 shadow-sm bg-gradient-to-br from-purple-50 to-white" style="--accent: #8b5cf6; --accent-light: #a78bfa">
-                <p class="text-[10px] uppercase tracking-wider text-purple-400 font-semibold">Net Payable</p>
-                <p class="text-2xl font-extrabold text-purple-900 mt-2">${fmt(d.net_tax_payable)}</p>
-                <p class="text-xs text-purple-400 mt-1">After ${fmt(d.tds_already_paid)} TDS</p>
+            <div class="card p-5">
+                <p class="section-label">Net Payable</p>
+                <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">${fmt(d.net_tax_payable)}</p>
+                <p class="text-xs text-neutral-400 mt-1">After ${fmt(d.tds_already_paid)} TDS</p>
             </div>
         </div>
 
         <!-- Regime Comparison -->
         ${d.regime_comparison ? `
-        <div class="bg-gradient-to-r ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'from-emerald-50 to-green-50 border-emerald-200' : 'from-amber-50 to-orange-50 border-amber-200'} rounded-2xl border p-5 shadow-sm">
+        <div class="card p-5">
             <div class="flex items-center gap-2 mb-3">
-                <div class="w-7 h-7 rounded-lg ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'bg-emerald-100' : 'bg-amber-100'} flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5 ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'text-emerald-600' : 'text-amber-600'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
-                <h3 class="text-xs font-bold ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'text-emerald-700' : 'text-amber-700'} uppercase tracking-wide">Regime Comparison</h3>
+                <h3 class="section-label">Regime Comparison</h3>
             </div>
             <div class="grid grid-cols-2 gap-3 mb-3">
-                <div class="p-3 bg-white/60 rounded-xl ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'ring-2 ring-emerald-300' : ''}">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">${d.regime_comparison.chosen_regime} Regime</p>
-                    <p class="text-lg font-extrabold text-gray-900 mt-1">${fmt(d.regime_comparison.chosen_tax)}</p>
+                <div class="p-3 bg-neutral-50 rounded-lg ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'ring-2 ring-neutral-900' : ''}">
+                    <p class="text-[10px] font-semibold text-neutral-400 uppercase">${d.regime_comparison.chosen_regime} Regime</p>
+                    <p class="text-lg font-semibold text-neutral-900 mt-1 tabular">${fmt(d.regime_comparison.chosen_tax)}</p>
                 </div>
-                <div class="p-3 bg-white/60 rounded-xl ${d.regime_comparison.better_regime !== d.regime_comparison.chosen_regime.toLowerCase() ? 'ring-2 ring-amber-300' : ''}">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">${d.regime_comparison.alternate_regime} Regime</p>
-                    <p class="text-lg font-extrabold text-gray-900 mt-1">${fmt(d.regime_comparison.alternate_tax)}</p>
+                <div class="p-3 bg-neutral-50 rounded-lg ${d.regime_comparison.better_regime !== d.regime_comparison.chosen_regime.toLowerCase() ? 'ring-2 ring-neutral-900' : ''}">
+                    <p class="text-[10px] font-semibold text-neutral-400 uppercase">${d.regime_comparison.alternate_regime} Regime</p>
+                    <p class="text-lg font-semibold text-neutral-900 mt-1 tabular">${fmt(d.regime_comparison.alternate_tax)}</p>
                 </div>
             </div>
-            <p class="text-sm font-semibold ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? 'text-emerald-700' : 'text-amber-700'}">
-                ${d.regime_comparison.better_regime === d.regime_comparison.chosen_regime.toLowerCase() ? '✅' : '💡'} ${d.regime_comparison.recommendation}
+            <p class="text-sm font-medium text-neutral-700">
+                ${d.regime_comparison.recommendation}
             </p>
         </div>` : ''}
 
         <!-- GST Status -->
         ${d.gst_status ? `
-        <div class="bg-white rounded-2xl border ${d.gst_status.required ? 'border-red-200' : 'border-gray-100'} p-5 shadow-sm">
+        <div class="card p-5 ${d.gst_status.required ? 'border-red-200' : ''}">
             <div class="flex items-center gap-2 mb-2">
-                <span class="text-xs font-bold uppercase tracking-wide ${d.gst_status.required ? 'text-red-600' : 'text-gray-500'}">GST Status</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${d.gst_status.required ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}">${d.gst_status.required ? 'Required' : 'Optional'}</span>
+                <span class="section-label ${d.gst_status.required ? 'text-red-600' : ''}">GST Status</span>
+                <span class="tag ${d.gst_status.required ? 'bg-red-100 text-red-700' : 'bg-neutral-100 text-neutral-600'}">${d.gst_status.required ? 'Required' : 'Optional'}</span>
             </div>
-            <p class="text-sm text-gray-700">${d.gst_status.message}</p>
-            ${d.gst_status.tip ? `<p class="text-xs text-gray-500 mt-1">💡 ${d.gst_status.tip}</p>` : ''}
+            <p class="text-sm text-neutral-700">${d.gst_status.message}</p>
+            ${d.gst_status.tip ? `<p class="text-xs text-neutral-500 mt-1">${d.gst_status.tip}</p>` : ''}
         </div>` : ''}
 
         <!-- Tax Computation -->
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div class="card p-6">
             <div class="flex items-center gap-2 mb-4">
-                <div class="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5 text-surface-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Computation</h3>
+                <h3 class="section-label">Computation</h3>
             </div>
             <div class="space-y-0 text-sm">
-                <div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Gross Income</span><span class="font-semibold">${fmt(d.gross_income)}</span></div>
+                <div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Gross Income</span><span class="font-semibold tabular">${fmt(d.gross_income)}</span></div>
                 ${d.computation_method && d.computation_method.includes('Presumptive') ?
-                    `<div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Deemed Profit (50% of Gross)</span><span class="font-semibold">${fmt(d.gross_income * 0.5)}</span></div>` :
-                    `<div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Less: Expenses</span><span class="font-semibold text-red-500">- ${fmt(d.expenses)}</span></div>`
+                    `<div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Deemed Profit (50% of Gross)</span><span class="font-semibold tabular">${fmt(d.gross_income * 0.5)}</span></div>` :
+                    `<div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Less: Expenses</span><span class="font-semibold text-red-500 tabular">- ${fmt(d.expenses)}</span></div>`
                 }
-                <div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Less: Deductions</span><span class="font-semibold text-red-500">- ${fmt(d.total_deductions)}</span></div>
-                <div class="flex justify-between py-2.5 px-3 rounded-lg bg-surface-50 border border-gray-100 font-bold"><span class="text-gray-900">Taxable Income</span><span>${fmt(d.taxable_income)}</span></div>
-                <div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Tax on Income</span><span class="font-semibold">${fmt(d.tax_before_rebate)}</span></div>
-                ${d.rebate_87a > 0 ? `<div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Less: Rebate u/s 87A</span><span class="font-semibold text-green-600">- ${fmt(d.rebate_87a)}</span></div>` : ''}
-                ${d.surcharge > 0 ? `<div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Surcharge</span><span class="font-semibold">${fmt(d.surcharge)}</span></div>` : ''}
-                <div class="flex justify-between py-2.5 px-3 rounded-lg hover:bg-surface-50 transition-colors"><span class="text-gray-600">Health & Education Cess (4%)</span><span class="font-semibold">${fmt(d.cess)}</span></div>
-                <div class="flex justify-between py-3 px-3 rounded-xl bg-brand-50 border border-brand-100 mt-2">
-                    <span class="text-brand-900 font-bold">Total Tax Liability</span>
-                    <span class="font-extrabold text-lg text-brand-700">${fmt(d.total_tax_liability)}</span>
+                <div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Less: Deductions</span><span class="font-semibold text-red-500 tabular">- ${fmt(d.total_deductions)}</span></div>
+                <div class="flex justify-between py-2.5 px-3 rounded-lg bg-neutral-50 border border-neutral-150 font-semibold"><span class="text-neutral-900">Taxable Income</span><span class="tabular">${fmt(d.taxable_income)}</span></div>
+                <div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Tax on Income</span><span class="font-semibold tabular">${fmt(d.tax_before_rebate)}</span></div>
+                ${d.rebate_87a > 0 ? `<div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Less: Rebate u/s 87A</span><span class="font-semibold text-green-600 tabular">- ${fmt(d.rebate_87a)}</span></div>` : ''}
+                ${d.surcharge > 0 ? `<div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Surcharge</span><span class="font-semibold tabular">${fmt(d.surcharge)}</span></div>` : ''}
+                <div class="table-row flex justify-between py-2.5 px-3 rounded-lg"><span class="text-neutral-600">Health & Education Cess (4%)</span><span class="font-semibold tabular">${fmt(d.cess)}</span></div>
+                <div class="flex justify-between py-3 px-3 rounded-lg bg-neutral-100 border border-neutral-200 mt-2">
+                    <span class="text-neutral-900 font-semibold">Total Tax Liability</span>
+                    <span class="font-semibold text-lg text-neutral-900 tabular">${fmt(d.total_tax_liability)}</span>
                 </div>
             </div>
         </div>
 
         <!-- Advance Tax Schedule -->
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div class="card p-6">
             <div class="flex items-center gap-2 mb-4">
-                <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">Advance Tax Schedule</h3>
+                <h3 class="section-label">Advance Tax Schedule</h3>
             </div>`;
 
     if (d.advance_tax_schedule && d.advance_tax_schedule[0] && d.advance_tax_schedule[0].note) {
-        html += `<div class="p-4 bg-green-50 rounded-xl border border-green-100 flex items-start gap-3">
+        html += `<div class="p-4 bg-neutral-50 rounded-lg border border-neutral-150 flex items-start gap-3">
             <svg class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <p class="text-sm text-green-700 font-medium">${d.advance_tax_schedule[0].note}</p>
+            <p class="text-sm text-neutral-700 font-medium">${d.advance_tax_schedule[0].note}</p>
         </div>`;
     } else if (d.advance_tax_schedule) {
         html += `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">`;
         d.advance_tax_schedule.forEach(q => {
             const isCurrent = q.quarter === d.current_quarter;
-            html += `<div class="p-4 rounded-xl transition-all ${isCurrent ? 'bg-brand-50 border-2 border-brand-300 shadow-sm shadow-brand-100' : 'bg-surface-50 border border-gray-100'}">
+            html += `<div class="p-4 rounded-lg transition-all ${isCurrent ? 'bg-neutral-100 border-2 border-neutral-900' : 'bg-neutral-50 border border-neutral-150'}">
                 <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-bold ${isCurrent ? 'text-brand-600' : 'text-gray-500'}">${q.quarter}</p>
-                    ${isCurrent ? '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-brand-200 text-brand-700 uppercase">Now</span>' : ''}
+                    <p class="text-xs font-semibold ${isCurrent ? 'text-neutral-900' : 'text-neutral-500'}">${q.quarter}</p>
+                    ${isCurrent ? '<span class="tag bg-neutral-900 text-white text-[9px]">Now</span>' : ''}
                 </div>
-                <p class="text-lg font-extrabold text-gray-900">${fmt(q.cumulative_amount)}</p>
-                <p class="text-[10px] text-gray-400 mt-1">Due: ${q.due_date}</p>
-                <div class="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                    <div class="h-1.5 rounded-full ${isCurrent ? 'bg-brand-500' : 'bg-gray-400'}" style="width: ${q.percent}%"></div>
+                <p class="text-lg font-semibold text-neutral-900 tabular">${fmt(q.cumulative_amount)}</p>
+                <p class="text-[10px] text-neutral-400 mt-1">Due: ${q.due_date}</p>
+                <div class="mt-2 w-full bg-neutral-200 rounded-full h-1.5">
+                    <div class="h-1.5 rounded-full ${isCurrent ? 'bg-neutral-900' : 'bg-neutral-400'}" style="width: ${q.percent}%"></div>
                 </div>
-                <p class="text-[10px] text-gray-400 mt-1">${q.percent}% cumulative</p>
+                <p class="text-[10px] text-neutral-400 mt-1">${q.percent}% cumulative</p>
             </div>`;
         });
         html += '</div>';
@@ -336,42 +326,42 @@ function renderTax(d) {
 
     // Tips
     if (d.tips && d.tips.length > 0) {
-        html += `<div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-6 shadow-sm">
+        html += `<div class="card p-6">
             <div class="flex items-center gap-2 mb-4">
-                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                 </div>
-                <h3 class="text-xs font-bold text-blue-600 uppercase tracking-wide">Tax-Saving Tips</h3>
+                <h3 class="section-label">Tax-Saving Tips</h3>
             </div>
             <div class="space-y-2.5">${d.tips.map(t =>
-                `<div class="flex items-start gap-3 p-2.5 bg-white/60 rounded-xl">
-                    <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="text-sm text-blue-800">${t}</span>
+                `<div class="flex items-start gap-3 p-2.5 bg-neutral-50 rounded-lg">
+                    <svg class="w-4 h-4 text-neutral-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-sm text-neutral-700">${t}</span>
                 </div>`
             ).join('')}</div>
         </div>`;
     }
 
     // TDS Reference
-    html += `<div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+    html += `<div class="card p-6">
         <div class="flex items-center gap-2 mb-4">
-            <div class="w-7 h-7 rounded-lg bg-surface-100 flex items-center justify-center">
-                <svg class="w-3.5 h-3.5 text-surface-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <div class="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide">TDS Reference Rates</h3>
+            <h3 class="section-label">TDS Reference Rates</h3>
         </div>
-        <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-sm">
-            <thead><tr class="bg-surface-50">
-                <th class="text-left py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Section</th>
-                <th class="text-left py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Description</th>
-                <th class="text-right py-3 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Rate</th>
+        <div class="overflow-x-auto rounded-lg border border-neutral-150"><table class="w-full text-sm">
+            <thead><tr class="bg-neutral-50">
+                <th class="text-left py-3 px-4 section-label">Section</th>
+                <th class="text-left py-3 px-4 section-label">Description</th>
+                <th class="text-right py-3 px-4 section-label">Rate</th>
             </tr></thead><tbody>`;
     if (d.tds_reference) {
         Object.values(d.tds_reference).forEach((t, i) => {
-            html += `<tr class="border-t border-gray-50 hover:bg-surface-50 transition-colors">
-                <td class="py-3 px-4 font-semibold text-gray-900">${t.section}</td>
-                <td class="py-3 px-4 text-gray-600">${t.description}</td>
-                <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-700">${t.rate}%</span></td>
+            html += `<tr class="table-row border-t border-neutral-100">
+                <td class="py-3 px-4 font-semibold text-neutral-900">${t.section}</td>
+                <td class="py-3 px-4 text-neutral-600">${t.description}</td>
+                <td class="py-3 px-4 text-right"><span class="tag bg-neutral-100 text-neutral-700">${t.rate}%</span></td>
             </tr>`;
         });
     }

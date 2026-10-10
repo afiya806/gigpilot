@@ -1,100 +1,180 @@
 {% extends "base.html" %}
 {% block title %}Dashboard - GigPilot{% endblock %}
 {% block content %}
-<div class="fade-in">
+<div class="fade-up">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-surface-900">Dashboard</h2>
-            <p class="text-sm text-gray-500 mt-1">Your freelance command center — powered by 5 AI agents</p>
+            <h2 class="text-xl font-semibold text-neutral-900">Dashboard</h2>
+            <p class="text-sm text-neutral-500 mt-0.5">Your freelance command center</p>
         </div>
         <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')"
-                class="px-5 py-2.5 gradient-bg text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 self-start sm:self-auto">
+                class="btn-primary">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             New Project
         </button>
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 mb-8">
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#3b82f6;--accent-to:#6366f1;">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active</span>
-                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                </div>
-            </div>
-            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_active_projects }}</p>
-            <p class="text-xs text-gray-400 mt-1">projects in progress</p>
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-8">
+        <div class="card p-4">
+            <span class="section-label">Active</span>
+            <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">{{ dashboard.total_active_projects }}</p>
+            <p class="text-xs text-neutral-400 mt-0.5">projects in progress</p>
         </div>
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#10b981;--accent-to:#34d399;">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Completed</span>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_completed }}</p>
-            <p class="text-xs text-gray-400 mt-1">delivered &amp; paid</p>
+        <div class="card p-4">
+            <span class="section-label">Completed</span>
+            <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">{{ dashboard.total_completed }}</p>
+            <p class="text-xs text-neutral-400 mt-0.5">delivered &amp; paid</p>
         </div>
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#8b5cf6;--accent-to:#a855f7;">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Pipeline</span>
-                <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-            <p class="text-3xl font-extrabold text-surface-900">&#8377;{{ dashboard.total_active_revenue|indian_number }}</p>
-            <p class="text-xs text-gray-400 mt-1">active projects</p>
+        <div class="card p-4">
+            <span class="section-label">Pipeline</span>
+            <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">&#8377;{{ dashboard.total_active_revenue|indian_number }}</p>
+            <p class="text-xs text-neutral-400 mt-0.5">active projects</p>
         </div>
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#10b981;--accent-to:#059669;">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Earned</span>
-                <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                </div>
-            </div>
-            <p class="text-3xl font-extrabold text-surface-900">&#8377;{{ dashboard.total_earned|indian_number }}</p>
-            <p class="text-xs text-gray-400 mt-1">completed &amp; paid</p>
+        <div class="card p-4">
+            <span class="section-label">Earned</span>
+            <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">&#8377;{{ dashboard.total_earned|indian_number }}</p>
+            <p class="text-xs text-neutral-400 mt-0.5">completed &amp; paid</p>
         </div>
-        <div class="stat-card bg-white rounded-2xl p-5 border border-gray-100 card-hover" style="--accent-from:#f59e0b;--accent-to:#fbbf24;">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Hours</span>
-                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="card p-4">
+            <span class="section-label">Hours</span>
+            <p class="text-2xl font-semibold text-neutral-900 mt-2 tabular">{{ dashboard.total_hours_logged }}</p>
+            <p class="text-xs text-neutral-400 mt-0.5">hours logged</p>
+        </div>
+    </div>
+
+    <!-- Visual Insights -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+        <!-- Revenue Split Donut -->
+        <div class="card p-5">
+            <span class="section-label">Revenue Split</span>
+            <div class="flex items-center gap-4 mt-4">
+                <div class="relative w-20 h-20 flex-shrink-0">
+                    <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F0F0F0" stroke-width="3"/>
+                        {% set active_rev = dashboard.total_active_revenue|float %}
+                        {% set earned_rev = dashboard.total_earned|float %}
+                        {% set total_rev = active_rev + earned_rev %}
+                        {% if total_rev > 0 %}
+                        {% set earned_pct = ((earned_rev / total_rev) * 100)|round|int %}
+                        {% set active_pct = 100 - earned_pct %}
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-dasharray="{{ earned_pct }} {{ 100 - earned_pct }}" stroke-linecap="round"/>
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#C8C8C8" stroke-width="3" stroke-dasharray="{{ active_pct }} {{ 100 - active_pct }}" stroke-dashoffset="-{{ earned_pct }}" stroke-linecap="round"/>
+                        {% else %}
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F0F0F0" stroke-width="3" stroke-dasharray="100 0"/>
+                        {% endif %}
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-sm font-semibold text-neutral-900 tabular">{% if total_rev > 0 %}{{ ((earned_rev / total_rev) * 100)|round|int }}%{% else %}0%{% endif %}</span>
+                    </div>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-neutral-900"></span>
+                        <span class="text-neutral-600">Earned: <span class="font-semibold text-neutral-900">&#8377;{{ dashboard.total_earned|indian_number }}</span></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-neutral-300"></span>
+                        <span class="text-neutral-600">Pipeline: <span class="font-semibold text-neutral-900">&#8377;{{ dashboard.total_active_revenue|indian_number }}</span></span>
+                    </div>
                 </div>
             </div>
-            <p class="text-3xl font-extrabold text-surface-900">{{ dashboard.total_hours_logged }}</p>
-            <p class="text-xs text-gray-400 mt-1">hours logged</p>
+        </div>
+
+        <!-- Project Status Bars -->
+        <div class="card p-5">
+            <span class="section-label">Project Status</span>
+            {% set active_count = dashboard.total_active_projects|int %}
+            {% set done_count = dashboard.total_completed|int %}
+            {% set overdue_count = dashboard.overdue_projects|length if dashboard.overdue_projects else 0 %}
+            {% set bar_total = active_count + done_count + overdue_count %}
+            <div class="space-y-3 mt-4">
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-neutral-600">Active</span>
+                        <span class="font-semibold text-neutral-900 tabular">{{ active_count }}</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-neutral-900 rounded-full transition-all duration-700" style="width:{{ (active_count / [bar_total,1]|max * 100)|round|int }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-neutral-600">Completed</span>
+                        <span class="font-semibold text-neutral-900 tabular">{{ done_count }}</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-neutral-400 rounded-full transition-all duration-700" style="width:{{ (done_count / [bar_total,1]|max * 100)|round|int }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-neutral-600">Overdue</span>
+                        <span class="font-semibold text-red-600 tabular">{{ overdue_count }}</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-red-500 rounded-full transition-all duration-700" style="width:{{ (overdue_count / [bar_total,1]|max * 100)|round|int }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productivity Gauge -->
+        <div class="card p-5">
+            <span class="section-label">Productivity Score</span>
+            {% set hours = dashboard.total_hours_logged|float %}
+            {% set total_est = 0 %}
+            {% for p in dashboard.projects %}{% if p.hours_estimated %}{% set total_est = total_est + p.hours_estimated|float %}{% endif %}{% endfor %}
+            {% set prod_score = ((hours / [total_est, 1]|max) * 100)|round|int %}
+            {% set clamped_score = [prod_score, 100]|min %}
+            <div class="flex items-center gap-4 mt-4">
+                <div class="relative w-20 h-20 flex-shrink-0">
+                    <svg viewBox="0 0 36 36" class="w-full h-full">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F0F0F0" stroke-width="3" stroke-dasharray="75, 100" transform="rotate(135, 18, 18)"/>
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="{% if clamped_score >= 70 %}#1A1A1A{% elif clamped_score >= 40 %}#A0A0A0{% else %}#ef4444{% endif %}" stroke-width="3" stroke-dasharray="{{ (clamped_score * 0.75)|round(1) }}, 100" stroke-linecap="round" transform="rotate(135, 18, 18)"/>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-lg font-semibold text-neutral-900 tabular">{{ clamped_score }}%</span>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                    <p class="text-neutral-600"><span class="font-semibold text-neutral-900">{{ hours|int }}</span> hrs logged</p>
+                    <p class="text-neutral-600"><span class="font-semibold text-neutral-900">{{ total_est|int }}</span> hrs estimated</p>
+                    <p class="mt-1 font-medium {% if clamped_score >= 70 %}text-neutral-900{% elif clamped_score >= 40 %}text-neutral-500{% else %}text-red-600{% endif %}">
+                        {% if clamped_score >= 70 %}On Track{% elif clamped_score >= 40 %}Needs Focus{% else %}Behind Schedule{% endif %}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Workload Health Banner -->
     {% if dashboard.workload_health %}
-    <div class="mb-6 p-4 rounded-2xl border {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-50/70 border-emerald-200{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-50/70 border-amber-200{% else %}bg-red-50/70 border-red-200{% endif %}">
+    <div class="mb-6 card p-4 {% if dashboard.workload_health.status == 'healthy' %}border-emerald-200{% elif dashboard.workload_health.status == 'moderate' %}border-amber-200{% else %}border-red-200{% endif %}">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-100{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-100{% else %}bg-red-100{% endif %} flex items-center justify-center flex-shrink-0">
+            <div class="w-8 h-8 rounded-lg {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-50{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-50{% else %}bg-red-50{% endif %} flex items-center justify-center flex-shrink-0">
                 {% if dashboard.workload_health.status == 'healthy' %}
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 {% elif dashboard.workload_health.status == 'moderate' %}
-                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
                 {% else %}
-                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 {% endif %}
             </div>
             <div class="flex-1">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs font-bold uppercase tracking-wide {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %}">
+                <div class="flex items-center gap-2 mb-0.5">
+                    <span class="text-xs font-semibold {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %}">
                         Workload: {{ dashboard.workload_health.status|capitalize }}
                     </span>
-                    <span class="text-xs font-bold px-1.5 py-0.5 rounded {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-200 text-emerald-800{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-200 text-amber-800{% else %}bg-red-200 text-red-800{% endif %}">{{ dashboard.workload_health.score }}/100</span>
+                    <span class="tag {% if dashboard.workload_health.status == 'healthy' %}bg-emerald-100 text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}bg-amber-100 text-amber-700{% else %}bg-red-100 text-red-700{% endif %}">{{ dashboard.workload_health.score }}/100</span>
                 </div>
                 <p class="text-xs {% if dashboard.workload_health.status == 'healthy' %}text-emerald-600{% elif dashboard.workload_health.status == 'moderate' %}text-amber-600{% else %}text-red-600{% endif %}">{{ dashboard.workload_health.message }}</p>
             </div>
             {% if dashboard.utilization_rate is defined %}
             <div class="text-right flex-shrink-0 hidden sm:block">
-                <p class="text-xs font-semibold {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %}">{{ dashboard.utilization_rate }}%</p>
-                <p class="text-[10px] {% if dashboard.workload_health.status == 'healthy' %}text-emerald-500{% elif dashboard.workload_health.status == 'moderate' %}text-amber-500{% else %}text-red-500{% endif %}">Utilization</p>
+                <p class="text-xs font-semibold {% if dashboard.workload_health.status == 'healthy' %}text-emerald-700{% elif dashboard.workload_health.status == 'moderate' %}text-amber-700{% else %}text-red-700{% endif %} tabular">{{ dashboard.utilization_rate }}%</p>
+                <p class="text-2xs text-neutral-400">Utilization</p>
             </div>
             {% endif %}
         </div>
@@ -103,72 +183,74 @@
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <a href="/email-parser" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all">
-            <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8"/></svg>
+        <a href="/email-parser" class="card group flex items-center gap-3 p-3">
+            <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-200 transition-colors">
+                <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold text-gray-800">Parse Email</p>
-                <p class="text-[10px] text-gray-400">Extract scope &amp; budget</p>
+                <p class="text-xs font-medium text-neutral-800">Parse Email</p>
+                <p class="text-2xs text-neutral-400">Extract scope &amp; budget</p>
             </div>
         </a>
-        <a href="/invoices" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/50 transition-all">
-            <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+        <a href="/invoices" class="card group flex items-center gap-3 p-3">
+            <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-200 transition-colors">
+                <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold text-gray-800">New Invoice</p>
-                <p class="text-[10px] text-gray-400">GST-compliant PDF</p>
+                <p class="text-xs font-medium text-neutral-800">New Invoice</p>
+                <p class="text-2xs text-neutral-400">GST-compliant PDF</p>
             </div>
         </a>
-        <a href="/contracts" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-amber-200 hover:bg-amber-50/50 transition-all">
-            <div class="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <a href="/contracts" class="card group flex items-center gap-3 p-3">
+            <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-200 transition-colors">
+                <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold text-gray-800">Scan Contract</p>
-                <p class="text-[10px] text-gray-400">Find red flags</p>
+                <p class="text-xs font-medium text-neutral-800">Scan Contract</p>
+                <p class="text-2xs text-neutral-400">Find red flags</p>
             </div>
         </a>
-        <a href="/tax" class="group flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all">
-            <div class="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <a href="/tax" class="card group flex items-center gap-3 p-3">
+            <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center group-hover:bg-neutral-200 transition-colors">
+                <svg class="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             </div>
             <div>
-                <p class="text-xs font-semibold text-gray-800">Tax Estimate</p>
-                <p class="text-[10px] text-gray-400">Advance tax calc</p>
+                <p class="text-xs font-medium text-neutral-800">Tax Estimate</p>
+                <p class="text-2xs text-neutral-400">Advance tax calc</p>
             </div>
         </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Overdue Projects -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl border border-gray-100 p-5">
-                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 pulse-dot"></span>
+            <div class="card p-5">
+                <h3 class="text-[13px] font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                    {% if dashboard.overdue_projects %}
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                    {% endif %}
                     Overdue
                     {% if dashboard.overdue_projects %}
-                    <span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-600">{{ dashboard.overdue_projects|length }}</span>
+                    <span class="ml-auto tag bg-red-50 text-red-600">{{ dashboard.overdue_projects|length }}</span>
                     {% endif %}
                 </h3>
                 {% if dashboard.overdue_projects %}
                     {% for p in dashboard.overdue_projects %}
-                    <div class="mb-3 p-3.5 bg-red-50/70 rounded-xl border border-red-100">
+                    <div class="mb-3 p-3 bg-red-50 rounded-lg border border-red-100">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-red-900">{{ p.title }}</p>
-                                <p class="text-xs text-red-600 mt-0.5">{{ p.client }}</p>
+                                <p class="text-sm font-medium text-red-900">{{ p.title }}</p>
+                                <p class="text-xs text-red-500 mt-0.5">{{ p.client }}</p>
                             </div>
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-lg bg-red-200 text-red-800">{{ p.days_left|abs }}d late</span>
+                            <span class="tag bg-red-100 text-red-700">{{ p.days_left|abs }}d late</span>
                         </div>
                         {% if p.hours_estimated and p.hours_estimated > 0 %}
                         <div class="mt-2">
-                            <div class="flex justify-between text-[10px] text-red-500 mb-1">
+                            <div class="flex justify-between text-2xs text-red-400 mb-1">
                                 <span>{{ p.hours_logged }}h / {{ p.hours_estimated }}h</span>
-                                <span>{{ ((p.hours_logged / p.hours_estimated) * 100)|round|int }}%</span>
+                                <span class="tabular">{{ ((p.hours_logged / p.hours_estimated) * 100)|round|int }}%</span>
                             </div>
-                            <div class="w-full h-1.5 bg-red-100 rounded-full overflow-hidden">
+                            <div class="w-full h-1 bg-red-100 rounded-full overflow-hidden">
                                 <div class="h-full bg-red-400 rounded-full" style="width:{{ [((p.hours_logged / p.hours_estimated) * 100)|round|int, 100]|min }}%"></div>
                             </div>
                         </div>
@@ -177,11 +259,11 @@
                     {% endfor %}
                 {% else %}
                     <div class="text-center py-8">
-                        <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <div class="w-10 h-10 rounded-lg bg-neutral-75 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 13l4 4L19 7"/></svg>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">All caught up!</p>
-                        <p class="text-xs text-gray-400 mt-1">No overdue projects</p>
+                        <p class="text-sm text-neutral-500">All caught up!</p>
+                        <p class="text-xs text-neutral-400 mt-0.5">No overdue projects</p>
                     </div>
                 {% endif %}
             </div>
@@ -189,38 +271,35 @@
 
         <!-- Upcoming Deadlines -->
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl border border-gray-100 p-5">
-                <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                    Upcoming Deadlines
-                </h3>
+            <div class="card p-5">
+                <h3 class="text-[13px] font-semibold text-neutral-900 mb-4">Upcoming Deadlines</h3>
                 {% if dashboard.upcoming_deadlines %}
-                    <div class="space-y-3">
+                    <div class="space-y-2">
                     {% for p in dashboard.upcoming_deadlines %}
-                    <div class="flex items-center gap-4 p-3.5 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors group">
-                        <div class="w-10 h-10 rounded-xl {% if p.days_left <= 3 %}bg-red-100{% elif p.days_left <= 7 %}bg-amber-100{% else %}bg-emerald-100{% endif %} flex items-center justify-center flex-shrink-0">
-                            <span class="text-sm font-bold {% if p.days_left <= 3 %}text-red-600{% elif p.days_left <= 7 %}text-amber-600{% else %}text-emerald-600{% endif %}">{{ p.days_left }}d</span>
+                    <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                        <div class="w-9 h-9 rounded-lg {% if p.days_left <= 3 %}bg-red-50{% elif p.days_left <= 7 %}bg-amber-50{% else %}bg-neutral-75{% endif %} flex items-center justify-center flex-shrink-0">
+                            <span class="text-xs font-semibold {% if p.days_left <= 3 %}text-red-600{% elif p.days_left <= 7 %}text-amber-600{% else %}text-neutral-600{% endif %} tabular">{{ p.days_left }}d</span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-900 truncate">{{ p.title }}</p>
-                            <p class="text-xs text-gray-500">{{ p.client }} &middot; &#8377;{{ p.budget|float|indian_number }}</p>
+                            <p class="text-sm font-medium text-neutral-900 truncate">{{ p.title }}</p>
+                            <p class="text-xs text-neutral-500">{{ p.client }} &middot; &#8377;{{ p.budget|float|indian_number }}</p>
                         </div>
                         <div class="text-right flex-shrink-0">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold {% if p.days_left <= 3 %}bg-red-100 text-red-700{% elif p.days_left <= 7 %}bg-amber-100 text-amber-700{% else %}bg-emerald-100 text-emerald-700{% endif %}">
+                            <span class="tag {% if p.days_left <= 3 %}bg-red-50 text-red-600{% elif p.days_left <= 7 %}bg-amber-50 text-amber-600{% else %}bg-neutral-75 text-neutral-600{% endif %}">
                                 {% if p.days_left <= 3 %}Urgent{% elif p.days_left <= 7 %}Soon{% else %}On Track{% endif %}
                             </span>
-                            <p class="text-[11px] text-gray-400 mt-1">{{ p.deadline|indian_date }}</p>
+                            <p class="text-2xs text-neutral-400 mt-1">{{ p.deadline|indian_date }}</p>
                         </div>
                     </div>
                     {% endfor %}
                     </div>
                 {% else %}
                     <div class="text-center py-12">
-                        <div class="w-12 h-12 rounded-full bg-surface-100 flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <div class="w-10 h-10 rounded-lg bg-neutral-75 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">No upcoming deadlines</p>
-                        <p class="text-xs text-gray-400 mt-1">Add a project to get started</p>
+                        <p class="text-sm text-neutral-500">No upcoming deadlines</p>
+                        <p class="text-xs text-neutral-400 mt-0.5">Add a project to get started</p>
                     </div>
                 {% endif %}
             </div>
@@ -228,78 +307,78 @@
     </div>
 
     <!-- All Projects -->
-    <div class="mt-6 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div class="mt-4 card overflow-hidden">
         <div class="p-5 pb-0 flex items-center justify-between">
-            <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+            <h3 class="text-[13px] font-semibold text-neutral-900 flex items-center gap-2">
                 All Projects
-                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-surface-100 text-gray-500">{{ dashboard.projects|length }}</span>
+                <span class="tag bg-neutral-75 text-neutral-500">{{ dashboard.projects|length }}</span>
             </h3>
         </div>
         {% if dashboard.projects %}
         <div class="overflow-x-auto p-5">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-gray-100">
-                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Project</th>
-                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Client</th>
-                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Progress</th>
-                        <th class="text-left py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Deadline</th>
-                        <th class="text-right py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Budget</th>
-                        <th class="text-right py-3 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                    <tr class="border-b border-neutral-100">
+                        <th class="text-left py-2.5 px-3 section-label">Project</th>
+                        <th class="text-left py-2.5 px-3 section-label">Client</th>
+                        <th class="text-left py-2.5 px-3 section-label">Status</th>
+                        <th class="text-left py-2.5 px-3 section-label">Progress</th>
+                        <th class="text-left py-2.5 px-3 section-label">Deadline</th>
+                        <th class="text-right py-2.5 px-3 section-label">Budget</th>
+                        <th class="text-right py-2.5 px-3 section-label">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in dashboard.projects %}
-                    <tr class="table-row border-b border-gray-50 last:border-0">
-                        <td class="py-3.5 px-3">
-                            <p class="font-semibold text-gray-900">{{ p.title }}</p>
+                    <tr class="table-row border-b border-neutral-75 last:border-0">
+                        <td class="py-3 px-3">
+                            <p class="font-medium text-neutral-900">{{ p.title }}</p>
                             {% if p.priority == 'high' %}
-                            <span class="text-[10px] font-bold text-red-500 uppercase">High Priority</span>
+                            <span class="text-2xs font-semibold text-red-500 uppercase">High Priority</span>
                             {% endif %}
                         </td>
-                        <td class="py-3.5 px-3 text-gray-600">{{ p.client }}</td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold
-                                {% if p.status == 'active' %}bg-blue-50 text-blue-700
+                        <td class="py-3 px-3 text-neutral-600">{{ p.client }}</td>
+                        <td class="py-3 px-3">
+                            <span class="tag
+                                {% if p.status == 'active' %}bg-accent-50 text-accent-700
                                 {% elif p.status == 'completed' %}bg-emerald-50 text-emerald-700
-                                {% else %}bg-gray-100 text-gray-600{% endif %}">
-                                <span class="w-1.5 h-1.5 rounded-full
-                                    {% if p.status == 'active' %}bg-blue-500
+                                {% else %}bg-neutral-100 text-neutral-600{% endif %}">
+                                <span class="w-1.5 h-1.5 rounded-full mr-1.5
+                                    {% if p.status == 'active' %}bg-accent-500
                                     {% elif p.status == 'completed' %}bg-emerald-500
-                                    {% else %}bg-gray-400{% endif %}"></span>
+                                    {% else %}bg-neutral-400{% endif %}"></span>
                                 {{ p.status|capitalize }}
                             </span>
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3 px-3">
                             {% if p.hours_estimated and p.hours_estimated > 0 %}
                             {% set pct = ((p.hours_logged / p.hours_estimated) * 100)|round|int %}
                             <div class="flex items-center gap-2">
-                                <div class="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full rounded-full {% if pct >= 100 %}bg-emerald-500{% elif pct >= 70 %}bg-amber-500{% else %}bg-brand-500{% endif %}" style="width:{{ [pct,100]|min }}%"></div>
+                                <div class="w-16 h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full {% if pct >= 100 %}bg-emerald-500{% elif pct >= 70 %}bg-amber-500{% else %}bg-neutral-900{% endif %}" style="width:{{ [pct,100]|min }}%"></div>
                                 </div>
-                                <span class="text-xs text-gray-500 font-medium">{{ pct }}%</span>
+                                <span class="text-xs text-neutral-500 tabular">{{ pct }}%</span>
                             </div>
                             {% else %}
-                            <span class="text-xs text-gray-400">—</span>
+                            <span class="text-xs text-neutral-300">n/a</span>
                             {% endif %}
                         </td>
-                        <td class="py-3.5 px-3 text-gray-600 text-sm">{{ p.deadline|indian_date }}</td>
-                        <td class="py-3.5 px-3 text-right font-semibold text-gray-900">&#8377;{{ p.budget|float|indian_number }}</td>
-                        <td class="py-3.5 px-3 text-right">
+                        <td class="py-3 px-3 text-neutral-600 text-sm">{{ p.deadline|indian_date }}</td>
+                        <td class="py-3 px-3 text-right font-medium text-neutral-900 tabular">&#8377;{{ p.budget|float|indian_number }}</td>
+                        <td class="py-3 px-3 text-right">
                             {% if p.status == 'active' %}
                             <div class="flex items-center justify-end gap-1">
-                                <button onclick="completeProject({{ p.id }})" title="Mark Complete" class="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-600 transition-colors">
+                                <button onclick="completeProject({{ p.id }})" title="Mark Complete" class="p-1.5 rounded-lg hover:bg-emerald-50 text-neutral-400 hover:text-emerald-600 transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 </button>
-                                <button onclick="deleteProject({{ p.id }}, '{{ p.title }}')" title="Cancel Project" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors">
+                                <button onclick="deleteProject({{ p.id }}, '{{ p.title }}')" title="Cancel Project" class="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-600 transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>
                             {% elif p.status == 'completed' %}
                             <span class="text-xs text-emerald-500">Done</span>
                             {% else %}
-                            <span class="text-xs text-gray-400">—</span>
+                            <span class="text-xs text-neutral-300">n/a</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -309,12 +388,12 @@
         </div>
         {% else %}
         <div class="text-center py-16 px-5">
-            <div class="w-16 h-16 rounded-2xl bg-surface-100 flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+            <div class="w-12 h-12 rounded-lg bg-neutral-75 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
             </div>
-            <p class="text-gray-600 font-semibold">No projects yet</p>
-            <p class="text-gray-400 text-sm mt-1">Parse a client email or add one manually to get started.</p>
-            <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')" class="mt-4 px-5 py-2 gradient-bg text-white text-sm font-medium rounded-xl hover:opacity-90 transition-all">
+            <p class="text-neutral-600 font-medium">No projects yet</p>
+            <p class="text-neutral-400 text-sm mt-1">Parse a client email or add one manually to get started.</p>
+            <button onclick="document.getElementById('addProjectModal').classList.remove('hidden')" class="mt-4 btn-primary">
                 Add Your First Project
             </button>
         </div>
@@ -323,50 +402,50 @@
 </div>
 
 <!-- Add Project Modal -->
-<div id="addProjectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg scale-in overflow-hidden">
-        <div class="gradient-bg px-6 py-4">
+<div id="addProjectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+    <div class="bg-white rounded-[10px] w-full max-w-lg overflow-hidden border border-neutral-150 fade-up">
+        <div class="bg-neutral-950 px-6 py-4">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-white">Add New Project</h3>
-                <button onclick="document.getElementById('addProjectModal').classList.add('hidden')" class="text-white/70 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <h3 class="text-sm font-semibold text-white">Add New Project</h3>
+                <button onclick="document.getElementById('addProjectModal').classList.add('hidden')" class="text-neutral-400 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
         </div>
         <form id="addProjectForm" class="p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Project Title</label>
-                    <input name="title" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-brand-400" placeholder="Website Redesign">
+                    <label class="block text-xs font-medium text-neutral-500 mb-1.5">Project Title</label>
+                    <input name="title" required class="input" placeholder="Website Redesign">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Client</label>
-                    <input name="client" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:border-brand-400" placeholder="Acme Corp">
+                    <label class="block text-xs font-medium text-neutral-500 mb-1.5">Client</label>
+                    <input name="client" required class="input" placeholder="Acme Corp">
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Deadline</label>
-                    <input name="deadline" type="date" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm">
+                    <label class="block text-xs font-medium text-neutral-500 mb-1.5">Deadline</label>
+                    <input name="deadline" type="date" class="input">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Budget (INR)</label>
-                    <input name="budget" type="number" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm" placeholder="50000">
+                    <label class="block text-xs font-medium text-neutral-500 mb-1.5">Budget (INR)</label>
+                    <input name="budget" type="number" class="input" placeholder="50000">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Est. Hours</label>
-                    <input name="hours_estimated" type="number" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm" placeholder="40">
+                    <label class="block text-xs font-medium text-neutral-500 mb-1.5">Est. Hours</label>
+                    <input name="hours_estimated" type="number" class="input" placeholder="40">
                 </div>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Priority</label>
-                <select name="priority" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm">
+                <label class="block text-xs font-medium text-neutral-500 mb-1.5">Priority</label>
+                <select name="priority" class="input">
                     <option value="low">Low</option>
                     <option value="medium" selected>Medium</option>
                     <option value="high">High</option>
                 </select>
             </div>
-            <button type="submit" class="w-full py-3 gradient-bg text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-500/25">
+            <button type="submit" class="w-full btn-primary justify-center py-2.5">
                 Add Project
             </button>
         </form>
@@ -379,7 +458,6 @@ document.getElementById('addProjectForm').addEventListener('submit', async (e) =
     const fd = new FormData(e.target);
     const data = Object.fromEntries(fd.entries());
 
-    // Validation
     if (!data.title || !data.title.trim()) {
         showToast('Project title is required', 'error'); return;
     }

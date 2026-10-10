@@ -3,209 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GigPilot — AI-Powered Back-Office Copilot for Indian Freelancers. 5 AI agents: Email Parser, Invoice Generator, Contract Scanner, Tax Estimator, Deadline Tracker.">
+    <meta name="description" content="GigPilot. The all-in-one freelance operations platform for Indian professionals. Email parsing, GST invoicing, contract review, tax planning, and project tracking.">
     <meta name="author" content="GigPilot">
-    <meta property="og:title" content="GigPilot — AI Freelancer Copilot">
-    <meta property="og:description" content="5 AI agents to automate your freelance back-office: parse emails, generate GST invoices, scan contracts, estimate taxes, and track deadlines.">
+    <meta property="og:title" content="GigPilot">
+    <meta property="og:description" content="All-in-one back-office for freelancers: parse client emails, generate GST invoices, scan contracts, estimate taxes, and track every project.">
     <meta property="og:type" content="website">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#111111">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <title>{% block title %}GigPilot{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe',
-                            300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1',
-                            600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+                        neutral: {
+                            25: '#FCFCFC',
+                            50: '#FAFAFA',
+                            75: '#F5F5F5',
+                            100: '#F0F0F0',
+                            150: '#E8E8E8',
+                            200: '#E0E0E0',
+                            300: '#C8C8C8',
+                            400: '#A0A0A0',
+                            500: '#787878',
+                            600: '#585858',
+                            700: '#404040',
+                            800: '#282828',
+                            900: '#1A1A1A',
+                            950: '#111111',
                         },
-                        surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
+                        accent: {
+                            50: '#EEF4FF',
+                            100: '#D9E5FF',
+                            200: '#BCD2FF',
+                            300: '#8EB4FF',
+                            400: '#5A8CFF',
+                            500: '#3366FF',
+                            600: '#1A4FFF',
+                            700: '#0D3FE6',
+                            800: '#1034B9',
+                            900: '#142F91',
+                        }
+                    },
+                    fontSize: {
+                        '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
-        /* Glassmorphism */
-        .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); }
-        .glass-dark { background: rgba(15,23,42,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-
-        /* Gradients */
-        .gradient-bg { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%); }
-        .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .gradient-border { border-image: linear-gradient(135deg, #6366f1, #a855f7) 1; }
-
-        /* Card effects */
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(99,102,241,0.2); }
-
-        /* Animations */
-        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-        .slide-in-left { animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
-        .scale-in { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-        .float { animation: float 6s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-
-        /* Glow effect */
-        .glow { box-shadow: 0 0 20px rgba(99,102,241,0.3), 0 0 60px rgba(99,102,241,0.1); }
-        .glow-sm { box-shadow: 0 0 10px rgba(99,102,241,0.2); }
-
-        /* Focus states */
-        textarea:focus, input:focus, select:focus { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); border-color: #818cf8; }
+        /* Focus */
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: #3366FF;
+            box-shadow: 0 0 0 3px rgba(51,102,255,0.08);
+        }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: #D4D4D4; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A3A3A3; }
 
         /* Sidebar */
-        .sidebar-link { position: relative; overflow: hidden; }
-        .sidebar-link::before { content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 0 4px 4px 0; transform: scaleY(0); transition: transform 0.2s ease; }
-        .sidebar-link.active::before, .sidebar-link:hover::before { transform: scaleY(1); }
+        .nav-item { position: relative; border-radius: 6px; transition: all 0.15s ease; }
+        .nav-item:hover { background: rgba(0,0,0,0.04); }
+        .nav-item.active { background: rgba(0,0,0,0.06); font-weight: 600; }
 
-        /* Badge animation */
-        .badge-pulse { animation: badgePulse 2s infinite; }
-        @keyframes badgePulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); } 70% { box-shadow: 0 0 0 6px rgba(99,102,241,0); } }
+        /* Animations */
+        .fade-up { animation: fadeUp 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Loading shimmer */
-        .shimmer { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        /* Card */
+        .card {
+            background: white;
+            border: 1px solid #E8E8E8;
+            border-radius: 10px;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            border-color: #D4D4D4;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
 
-        /* Mobile sidebar */
-        .sidebar-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        /* Button primary */
+        .btn-primary {
+            background: #111111;
+            color: white;
+            font-weight: 500;
+            font-size: 0.8125rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .btn-primary:hover { background: #282828; }
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* Button secondary */
+        .btn-secondary {
+            background: white;
+            color: #282828;
+            border: 1px solid #E0E0E0;
+            font-weight: 500;
+            font-size: 0.8125rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .btn-secondary:hover { background: #FAFAFA; border-color: #C8C8C8; }
+
+        /* Toast */
+        .toast { animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .toast-out { animation: toastOut 0.2s ease forwards; }
+        @keyframes toastOut { to { opacity: 0; transform: translateY(-4px); } }
+
+        /* Table */
+        .table-row { transition: background 0.1s ease; }
+        .table-row:hover { background: #FAFAFA; }
+
+        /* Input base */
+        .input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: white;
+            transition: all 0.15s ease;
+            color: #1A1A1A;
+        }
+        .input::placeholder { color: #A0A0A0; }
+
+        /* Loading spinner */
+        .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid #E0E0E0;
+            border-top-color: #111111;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Sidebar overlay (mobile) */
+        .sidebar-overlay { opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
 
-        /* Toast notifications */
-        .toast { animation: toastIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes toastIn { from { opacity: 0; transform: translateY(16px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .toast-out { animation: toastOut 0.3s ease forwards; }
-        @keyframes toastOut { to { opacity: 0; transform: translateY(-8px) scale(0.95); } }
+        /* Tag / badge */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
 
-        /* Stat card gradient borders */
-        .stat-card { position: relative; overflow: hidden; }
-        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-from, #6366f1), var(--accent-to, #a855f7)); }
+        /* Counter nums */
+        .tabular { font-variant-numeric: tabular-nums; }
 
-        /* Table row hover */
-        .table-row { transition: all 0.15s ease; }
-        .table-row:hover { background: rgba(99,102,241,0.04); }
+        /* Divider */
+        .divider { height: 1px; background: #F0F0F0; }
+
+        /* Notion-style section label */
+        .section-label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: #787878;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
     </style>
     {% block head %}{% endblock %}
 </head>
-<body class="h-full bg-surface-50">
+<body class="h-full bg-neutral-50">
     <div class="min-h-full flex">
         <!-- Mobile menu button -->
-        <button id="mobileMenuBtn" onclick="toggleSidebar()" class="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 rounded-xl bg-surface-900 text-white flex items-center justify-center shadow-lg hover:bg-surface-800 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button id="mobileMenuBtn" onclick="toggleSidebar()" class="lg:hidden fixed top-3 left-3 z-50 w-9 h-9 rounded-lg bg-white border border-neutral-200 flex items-center justify-center shadow-sm hover:bg-neutral-50 transition-colors">
+            <svg class="w-4 h-4 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
 
-        <!-- Sidebar Overlay (mobile) -->
-        <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black/50 z-30 lg:hidden" onclick="toggleSidebar()"></div>
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black/20 z-30 lg:hidden" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-72 bg-surface-950 text-white flex flex-col fixed h-full z-40 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <aside id="sidebar" class="w-60 bg-neutral-75 border-r border-neutral-150 flex flex-col fixed h-full z-40 -translate-x-full lg:translate-x-0 transition-transform duration-200">
             <!-- Brand -->
-            <div class="p-6 pb-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg glow-sm">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            <div class="px-4 pt-5 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-neutral-950 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-lg font-extrabold tracking-tight">GigPilot</h1>
-                        <p class="text-[11px] text-gray-400 font-medium">AI Copilot for Freelancers</p>
+                        <h1 class="text-sm font-semibold text-neutral-900 tracking-tight">GigPilot</h1>
                     </div>
                 </div>
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 px-3 space-y-0.5 mt-2">
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-4 mb-2">Navigation</p>
-                <a href="/" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 {% if request.url.path == '/' %}active bg-white/10 text-white{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
-                    <div class="w-8 h-8 rounded-lg {% if request.url.path == '/' %}bg-brand-500/20{% else %}bg-white/5{% endif %} flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                    </div>
+            <nav class="flex-1 px-2.5 mt-1 space-y-0.5">
+                <a href="/" class="nav-item flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] {% if request.url.path == '/' %}active text-neutral-900{% else %}text-neutral-600{% endif %}">
+                    <svg class="w-[18px] h-[18px] {% if request.url.path == '/' %}text-neutral-700{% else %}text-neutral-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                     Dashboard
                 </a>
 
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-4 mt-5 mb-2">AI Agents</p>
-                <a href="/email-parser" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 {% if request.url.path == '/email-parser' %}active bg-white/10 text-white{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
-                    <div class="w-8 h-8 rounded-lg {% if request.url.path == '/email-parser' %}bg-blue-500/20{% else %}bg-white/5{% endif %} flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    </div>
+                <div class="pt-4 pb-1.5 px-2.5">
+                    <span class="section-label">Tools</span>
+                </div>
+
+                <a href="/email-parser" class="nav-item flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] {% if request.url.path == '/email-parser' %}active text-neutral-900{% else %}text-neutral-600{% endif %}">
+                    <svg class="w-[18px] h-[18px] {% if request.url.path == '/email-parser' %}text-neutral-700{% else %}text-neutral-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     Email Parser
-                    <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-500/20 text-blue-300">AI</span>
                 </a>
-                <a href="/invoices" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 {% if request.url.path == '/invoices' %}active bg-white/10 text-white{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
-                    <div class="w-8 h-8 rounded-lg {% if request.url.path == '/invoices' %}bg-emerald-500/20{% else %}bg-white/5{% endif %} flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
-                    </div>
-                    Invoice Generator
-                    <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300">AI</span>
+                <a href="/invoices" class="nav-item flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] {% if request.url.path == '/invoices' %}active text-neutral-900{% else %}text-neutral-600{% endif %}">
+                    <svg class="w-[18px] h-[18px] {% if request.url.path == '/invoices' %}text-neutral-700{% else %}text-neutral-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+                    Invoices
                 </a>
-                <a href="/contracts" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 {% if request.url.path == '/contracts' %}active bg-white/10 text-white{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
-                    <div class="w-8 h-8 rounded-lg {% if request.url.path == '/contracts' %}bg-amber-500/20{% else %}bg-white/5{% endif %} flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    </div>
-                    Contract Scanner
-                    <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300">AI</span>
+                <a href="/contracts" class="nav-item flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] {% if request.url.path == '/contracts' %}active text-neutral-900{% else %}text-neutral-600{% endif %}">
+                    <svg class="w-[18px] h-[18px] {% if request.url.path == '/contracts' %}text-neutral-700{% else %}text-neutral-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    Contracts
                 </a>
-                <a href="/tax" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 {% if request.url.path == '/tax' %}active bg-white/10 text-white{% else %}text-gray-400 hover:bg-white/5 hover:text-white{% endif %}">
-                    <div class="w-8 h-8 rounded-lg {% if request.url.path == '/tax' %}bg-purple-500/20{% else %}bg-white/5{% endif %} flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    </div>
+                <a href="/tax" class="nav-item flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] {% if request.url.path == '/tax' %}active text-neutral-900{% else %}text-neutral-600{% endif %}">
+                    <svg class="w-[18px] h-[18px] {% if request.url.path == '/tax' %}text-neutral-700{% else %}text-neutral-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                     Tax Helper
-                    <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-purple-500/20 text-purple-300">AI</span>
                 </a>
             </nav>
 
             <!-- Footer -->
-            <div class="p-4 mx-3 mb-3 rounded-xl bg-white/5 space-y-2">
+            <div class="px-4 py-3 border-t border-neutral-150">
                 <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></div>
-                    <span class="text-xs text-gray-400 font-medium">5 AI Agents Online</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span class="text-2xs text-neutral-400">All systems online</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <a href="https://github.com" target="_blank" class="text-gray-500 hover:text-gray-300 transition-colors">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-                    </a>
-                    <span class="text-[10px] text-gray-500">Built for HackNowa 2026</span>
-                </div>
-                <p class="text-[10px] text-gray-600">v2.0 · Hybrid AI (Claude + Rule-Based)</p>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 lg:ml-72">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <main class="flex-1 lg:ml-60 min-h-screen">
+            <div class="max-w-5xl mx-auto px-4 sm:px-8 py-6 lg:py-8">
                 {% block content %}{% endblock %}
             </div>
         </main>
     </div>
 
     <!-- Toast Container -->
-    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-3"></div>
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
 
     <script>
-    // Mobile sidebar toggle
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -213,29 +273,19 @@
         overlay.classList.toggle('active');
     }
 
-    // Toast notification system
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
-        const colors = {
-            success: 'bg-emerald-600',
-            error: 'bg-red-600',
-            info: 'bg-brand-600',
-            warning: 'bg-amber-600'
-        };
-        const icons = {
-            success: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>',
-            error: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>',
-            info: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
-            warning: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>'
-        };
-        toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-xl ${colors[type]} text-white shadow-xl min-w-[280px]`;
-        toast.innerHTML = `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icons[type]}</svg><span class="text-sm font-medium">${message}</span>`;
+        const bg = type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-neutral-900';
+        toast.className = `toast flex items-center gap-2.5 px-4 py-2.5 rounded-lg ${bg} text-white shadow-lg min-w-[240px]`;
+        const iconPath = type === 'error'
+            ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>'
+            : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+        toast.innerHTML = `<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${iconPath}</svg><span class="text-sm">${message}</span>`;
         container.appendChild(toast);
-        setTimeout(() => { toast.classList.add('toast-out'); setTimeout(() => toast.remove(), 300); }, 3000);
+        setTimeout(() => { toast.classList.add('toast-out'); setTimeout(() => toast.remove(), 200); }, 3000);
     }
 
-    // Close sidebar on window resize to desktop
     window.addEventListener('resize', () => {
         if (window.innerWidth >= 1024) {
             document.getElementById('sidebar').classList.remove('-translate-x-full');

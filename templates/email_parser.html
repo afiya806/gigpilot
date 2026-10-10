@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Email Parser - GigPilot{% endblock %}
 {% block content %}
-<div class="fade-in">
+<div class="fade-up">
     <!-- Page Header -->
     <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-surface-900">Email Parser Agent</h2>
-                <p class="text-sm text-gray-500">Paste a client email. AI extracts scope, deadlines, deliverables, and red flags.</p>
-            </div>
-        </div>
+        <h2 class="text-2xl font-semibold text-neutral-900">Email Parser</h2>
+        <p class="text-sm text-neutral-500 mt-1">Paste a client email to extract scope, deadlines, deliverables, and red flags.</p>
     </div>
 
     <!-- Sample Emails -->
     <div class="mb-6">
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Try a sample email</p>
+        <p class="section-label mb-3">Try a sample email</p>
         <div class="flex flex-wrap gap-2">
-            <button onclick="loadSample('ecommerce')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 transition-colors border border-brand-100">
-                🛒 E-Commerce Project
+            <button onclick="loadSample('ecommerce')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-100 border border-neutral-150">
+                E-Commerce Project
             </button>
-            <button onclick="loadSample('mobile')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors border border-purple-100">
-                📱 Mobile App Inquiry
+            <button onclick="loadSample('mobile')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-100 border border-neutral-150">
+                Mobile App Inquiry
             </button>
-            <button onclick="loadSample('urgent')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition-colors border border-red-100">
-                🚨 Urgent Fix Request
+            <button onclick="loadSample('urgent')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-100 border border-neutral-150">
+                Urgent Fix Request
             </button>
         </div>
     </div>
@@ -34,12 +27,12 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Input -->
         <div>
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div class="card p-5">
                 <div class="flex items-center justify-between mb-3">
-                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Client Email</label>
-                    <span id="charCount" class="text-xs text-gray-400">0 chars</span>
+                    <label class="section-label">Client Email</label>
+                    <span id="charCount" class="text-xs text-neutral-400">0 chars</span>
                 </div>
-                <textarea id="emailInput" rows="18" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm resize-none leading-relaxed bg-surface-50 focus:bg-white transition-colors"
+                <textarea id="emailInput" rows="18" class="input w-full resize-none leading-relaxed"
                     oninput="document.getElementById('charCount').textContent = this.value.length + ' chars'"
                     placeholder="Hi, we're looking for a freelance developer to build our new e-commerce platform. Budget is around 2,00,000 INR. We need it done by March 15, 2026.
 
@@ -54,34 +47,26 @@ Let me know if you're interested.
 Thanks,
 Priya Sharma
 TechStart Solutions"></textarea>
-                <button id="parseBtn" onclick="parseEmail()" class="mt-4 w-full py-3 gradient-bg text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-500/25 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                <button id="parseBtn" onclick="parseEmail()" class="mt-4 w-full py-3 btn-primary text-sm flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    Parse with AI
+                    Parse Email
                 </button>
             </div>
         </div>
 
         <!-- Output -->
         <div>
-            <div id="resultPanel" class="bg-white rounded-2xl border border-gray-100 p-6 min-h-[540px] shadow-sm">
-                <div id="emptyState" class="flex flex-col items-center justify-center h-96 text-gray-400">
-                    <div class="w-20 h-20 rounded-2xl bg-surface-50 flex items-center justify-center mb-4 float">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <div id="resultPanel" class="card p-5 min-h-[540px]">
+                <div id="emptyState" class="flex flex-col items-center justify-center h-96 text-neutral-400">
+                    <div class="w-16 h-16 rounded-xl bg-neutral-75 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     </div>
-                    <p class="text-sm font-medium">Paste an email and click Parse</p>
-                    <p class="text-xs text-gray-300 mt-1">AI will extract key project details</p>
+                    <p class="text-sm font-medium text-neutral-500">Paste an email and click Parse</p>
+                    <p class="text-xs text-neutral-400 mt-1">Key project details will be extracted automatically</p>
                 </div>
                 <div id="loadingState" class="hidden flex flex-col items-center justify-center h-96">
-                    <div class="relative">
-                        <div class="w-12 h-12 border-3 border-brand-100 rounded-full"></div>
-                        <div class="w-12 h-12 border-3 border-transparent border-t-brand-600 rounded-full animate-spin absolute inset-0"></div>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-4 font-medium">AI agent analyzing email...</p>
-                    <div class="flex gap-1 mt-2">
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 0ms"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 150ms"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 300ms"></div>
-                    </div>
+                    <div class="spinner"></div>
+                    <p class="text-sm text-neutral-500 mt-4 font-medium">Analyzing email...</p>
                 </div>
                 <div id="resultContent" class="hidden space-y-4"></div>
             </div>
@@ -145,8 +130,8 @@ function loadSample(key) {
     const textarea = document.getElementById('emailInput');
     textarea.value = SAMPLES[key];
     textarea.dispatchEvent(new Event('input'));
-    textarea.classList.add('ring-2', 'ring-brand-200');
-    setTimeout(() => textarea.classList.remove('ring-2', 'ring-brand-200'), 500);
+    textarea.classList.add('ring-2', 'ring-neutral-200');
+    setTimeout(() => textarea.classList.remove('ring-2', 'ring-neutral-200'), 500);
 }
 
 async function parseEmail() {
@@ -160,7 +145,7 @@ async function parseEmail() {
     document.getElementById('resultContent').classList.add('hidden');
     document.getElementById('loadingState').classList.remove('hidden');
     document.getElementById('parseBtn').disabled = true;
-    document.getElementById('parseBtn').innerHTML = '<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Analyzing...';
+    document.getElementById('parseBtn').innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div> Analyzing...';
 
     try {
         const res = await fetch('/api/parse-email', {
@@ -183,7 +168,7 @@ async function parseEmail() {
     }
 
     document.getElementById('parseBtn').disabled = false;
-    document.getElementById('parseBtn').innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Parse with AI';
+    document.getElementById('parseBtn').innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Parse Email';
 }
 
 function renderResult(data) {
@@ -191,65 +176,63 @@ function renderResult(data) {
     const c = document.getElementById('resultContent');
 
     const priorityConfig = {
-        high: { color: 'red', icon: '🔴', label: 'High Priority' },
-        medium: { color: 'amber', icon: '🟡', label: 'Medium Priority' },
-        low: { color: 'green', icon: '🟢', label: 'Low Priority' }
+        high: { color: 'red', label: 'High Priority' },
+        medium: { color: 'amber', label: 'Medium Priority' },
+        low: { color: 'green', label: 'Low Priority' }
     };
     const p = priorityConfig[data.priority] || priorityConfig.medium;
 
     let html = `
-        <div class="flex items-center justify-between mb-4 slide-in-left">
-            <h3 class="text-sm font-bold text-gray-900">Extracted Information</h3>
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-${p.color}-100 text-${p.color}-700 flex items-center gap-1.5">
-                <span>${p.icon}</span> ${p.label}
-            </span>
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-neutral-900">Extracted Information</h3>
+            <span class="tag bg-${p.color}-50 text-${p.color}-700 border border-${p.color}-100">${p.label}</span>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 scale-in">
-            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Client</p>
-                <p class="text-sm font-semibold text-gray-900">${data.client_name || 'Unknown'}</p>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <p class="section-label mb-1">Client</p>
+                <p class="text-sm font-semibold text-neutral-900">${data.client_name || 'Unknown'}</p>
             </div>
-            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Budget</p>
-                <p class="text-sm font-semibold text-gray-900">${data.budget ? (data.currency === 'INR' ? '₹' : '$') + Number(data.budget).toLocaleString('en-IN') : 'Not specified'}</p>
+            <div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <p class="section-label mb-1">Budget</p>
+                <p class="text-sm font-semibold text-neutral-900">${data.budget ? (data.currency === 'INR' ? '₹' : '$') + Number(data.budget).toLocaleString('en-IN') : 'Not specified'}</p>
             </div>
-            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Deadline</p>
-                <p class="text-sm font-semibold text-gray-900">${data.deadline || 'Not specified'}</p>
+            <div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <p class="section-label mb-1">Deadline</p>
+                <p class="text-sm font-semibold text-neutral-900">${data.deadline || 'Not specified'}</p>
             </div>
-            <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-                <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Project</p>
-                <p class="text-sm font-semibold text-gray-900">${data.project_title || 'Untitled'}</p>
+            <div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <p class="section-label mb-1">Project</p>
+                <p class="text-sm font-semibold text-neutral-900">${data.project_title || 'Untitled'}</p>
             </div>
         </div>
 
-        <div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Scope</p>
-            <p class="text-sm text-gray-700 leading-relaxed">${data.scope || 'See email for details'}</p>
+        <div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+            <p class="section-label mb-1">Scope</p>
+            <p class="text-sm text-neutral-700 leading-relaxed">${data.scope || 'See email for details'}</p>
         </div>
     `;
 
     if (data.deliverables && data.deliverables.length > 0) {
-        html += `<div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-2">Deliverables</p>
+        html += `<div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+            <p class="section-label mb-2">Deliverables</p>
             <div class="space-y-1.5">${data.deliverables.map(d => `
                 <div class="flex items-start gap-2">
-                    <div class="w-5 h-5 rounded-md bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg class="w-3 h-3 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <div class="w-5 h-5 rounded bg-neutral-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                     </div>
-                    <span class="text-sm text-gray-700">${d}</span>
+                    <span class="text-sm text-neutral-700">${d}</span>
                 </div>`).join('')}</div>
         </div>`;
     }
 
     if (data.red_flags && data.red_flags.length > 0) {
-        html += `<div class="p-3.5 bg-red-50/80 rounded-xl border border-red-100">
+        html += `<div class="p-3 bg-red-50 rounded-lg border border-red-100">
             <div class="flex items-center gap-2 mb-2">
-                <div class="w-5 h-5 rounded-md bg-red-100 flex items-center justify-center">
+                <div class="w-5 h-5 rounded bg-red-100 flex items-center justify-center">
                     <svg class="w-3 h-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
                 </div>
-                <p class="text-xs font-bold text-red-600 uppercase tracking-wide">Red Flags</p>
+                <p class="section-label text-red-600">Red Flags</p>
             </div>
             <div class="space-y-1.5">${data.red_flags.map(f => `
                 <div class="flex items-start gap-2">
@@ -259,80 +242,77 @@ function renderResult(data) {
         </div>`;
     }
 
-    // Tech stack
     if (data.tech_stack && data.tech_stack.length > 0) {
-        html += `<div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-            <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-2">Tech Stack Detected</p>
+        html += `<div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+            <p class="section-label mb-2">Tech Stack Detected</p>
             <div class="flex flex-wrap gap-1.5">${data.tech_stack.map(t => `
-                <span class="px-2 py-1 text-xs font-medium rounded-md bg-purple-50 text-purple-700 border border-purple-100">${t}</span>`).join('')}</div>
+                <span class="tag bg-neutral-100 text-neutral-700 border border-neutral-150">${t}</span>`).join('')}</div>
         </div>`;
     }
 
-    // Confidence indicators
     const confFields = [
         { key: 'client_name', label: 'Client' },
         { key: 'budget', label: 'Budget' },
         { key: 'deadline', label: 'Deadline' },
         { key: 'scope', label: 'Scope' },
     ];
-    html += `<div class="p-3.5 bg-gradient-to-br from-surface-50 to-white rounded-xl border border-gray-100">
-        <p class="text-[10px] uppercase tracking-wider text-gray-400 mb-2">Extraction Confidence</p>
+    html += `<div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+        <p class="section-label mb-2">Extraction Confidence</p>
         <div class="grid grid-cols-2 gap-2">${confFields.map(f => {
             const val = data[f.key];
-            const hasVal = val && val !== 'Unknown' && val !== 'Unknown Client' && val !== 'See email for details — request a detailed brief';
+            const hasVal = val && val !== 'Unknown' && val !== 'Unknown Client' && val !== 'See email for details. Request a detailed brief';
             const conf = hasVal ? 'High' : 'Low';
-            const confColor = hasVal ? 'emerald' : 'gray';
+            const confColor = hasVal ? 'green' : 'neutral';
             return `<div class="flex items-center gap-2">
                 <div class="w-2 h-2 rounded-full bg-${confColor}-400"></div>
-                <span class="text-xs text-gray-600">${f.label}: <span class="font-semibold text-${confColor}-600">${conf}</span></span>
+                <span class="text-xs text-neutral-600">${f.label}: <span class="font-semibold text-${confColor}-600">${conf}</span></span>
             </div>`;
         }).join('')}</div>
     </div>`;
 
     if (data.action_items && data.action_items.length > 0) {
-        html += `<div class="p-3.5 bg-blue-50/80 rounded-xl border border-blue-100">
+        html += `<div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
             <div class="flex items-center gap-2 mb-2">
-                <div class="w-5 h-5 rounded-md bg-blue-100 flex items-center justify-center">
-                    <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <div class="w-5 h-5 rounded bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </div>
-                <p class="text-xs font-bold text-blue-600 uppercase tracking-wide">Suggested Next Steps</p>
+                <p class="section-label">Suggested Next Steps</p>
             </div>
             <div class="space-y-1.5">${data.action_items.map((a, i) => `
                 <div class="flex items-start gap-2">
-                    <span class="w-5 h-5 rounded-md bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600 flex-shrink-0">${i+1}</span>
-                    <span class="text-sm text-blue-800">${a}</span>
+                    <span class="w-5 h-5 rounded bg-neutral-100 flex items-center justify-center text-[10px] font-bold text-neutral-600 flex-shrink-0">${i+1}</span>
+                    <span class="text-sm text-neutral-700">${a}</span>
                 </div>`).join('')}</div>
         </div>`;
     }
 
-    // Draft reply section
     const tone = data.suggested_reply_tone || 'professional';
     const clientName = data.client_name || 'there';
     const projectTitle = data.project_title || 'the project';
-    const draftReply = `Hi ${clientName.split(' ')[0]},\n\nThank you for reaching out regarding ${projectTitle}. I've reviewed the requirements and I'm very interested in working on this.\n\n${data.deliverables && data.deliverables.length > 0 ? 'I can see the key deliverables — I\'d love to discuss the finer details and share a timeline breakdown.\n\n' : ''}${data.budget ? '' : 'Could you share more details on the budget range so I can put together an accurate proposal?\n\n'}${data.deadline ? 'The timeline looks feasible. ' : 'Could we also discuss the expected timeline? '}I'd be happy to hop on a quick call to align on scope and next steps.\n\nLooking forward to hearing from you.\n\nBest regards`;
+    const draftReply = `Hi ${clientName.split(' ')[0]},\n\nThank you for reaching out regarding ${projectTitle}. I've reviewed the requirements and I'm very interested in working on this.\n\n${data.deliverables && data.deliverables.length > 0 ? 'I can see the key deliverables. I\'d love to discuss the finer details and share a timeline breakdown.\n\n' : ''}${data.budget ? '' : 'Could you share more details on the budget range so I can put together an accurate proposal?\n\n'}${data.deadline ? 'The timeline looks feasible. ' : 'Could we also discuss the expected timeline? '}I'd be happy to hop on a quick call to align on scope and next steps.\n\nLooking forward to hearing from you.\n\nBest regards`;
 
-    html += `<div class="p-3.5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+    html += `<div class="p-3 bg-neutral-50 rounded-lg border border-neutral-100">
         <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
-                <div class="w-5 h-5 rounded-md bg-green-100 flex items-center justify-center">
-                    <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                <div class="w-5 h-5 rounded bg-neutral-100 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                 </div>
-                <p class="text-xs font-bold text-green-700 uppercase tracking-wide">Draft Reply (${tone})</p>
+                <p class="section-label">Draft Reply (${tone})</p>
             </div>
-            <button onclick="navigator.clipboard.writeText(document.getElementById('draftReplyText').textContent); showToast('Reply copied!','success');" class="text-xs font-medium text-green-600 hover:text-green-800 transition-colors flex items-center gap-1">
+            <button onclick="navigator.clipboard.writeText(document.getElementById('draftReplyText').textContent); showToast('Reply copied!','success');" class="text-xs font-medium text-neutral-500 hover:text-neutral-800 transition-colors flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                 Copy
             </button>
         </div>
-        <p id="draftReplyText" class="text-sm text-green-900 leading-relaxed whitespace-pre-line">${draftReply}</p>
+        <p id="draftReplyText" class="text-sm text-neutral-700 leading-relaxed whitespace-pre-line">${draftReply}</p>
     </div>`;
 
     html += `<div class="grid grid-cols-2 gap-3">
-        <button onclick="addAsProject()" class="py-3 bg-surface-900 text-white text-sm font-semibold rounded-xl hover:bg-surface-800 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] hover:shadow-lg">
+        <button onclick="addAsProject()" class="py-3 btn-primary text-sm flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Add as Project
         </button>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('draftReplyText').textContent); showToast('Reply copied to clipboard!','success');" class="py-3 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] hover:shadow-lg">
+        <button onclick="navigator.clipboard.writeText(document.getElementById('draftReplyText').textContent); showToast('Reply copied to clipboard!','success');" class="py-3 btn-secondary text-sm flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
             Copy Reply
         </button>

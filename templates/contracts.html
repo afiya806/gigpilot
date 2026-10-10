@@ -1,29 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Contract Scanner - GigPilot{% endblock %}
 {% block content %}
-<div class="fade-in">
+<div class="fade-up">
     <!-- Page Header -->
     <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-surface-900">Contract Scanner</h2>
-                <p class="text-sm text-gray-500">Paste a freelance contract. AI highlights red flags and unfavorable clauses.</p>
-            </div>
-        </div>
+        <h2 class="text-2xl font-semibold text-neutral-900">Contract Scanner</h2>
+        <p class="text-sm text-neutral-500 mt-1">Paste a freelance contract to highlight red flags and unfavorable clauses.</p>
     </div>
 
     <!-- Sample Contracts -->
     <div class="mb-6">
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Try a sample contract</p>
+        <p class="section-label mb-3">Try a sample contract</p>
         <div class="flex flex-wrap gap-2">
-            <button onclick="loadSample('risky')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition-colors border border-red-100">
-                🚩 Risky Contract
+            <button onclick="loadSample('risky')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-100 border border-neutral-150">
+                Risky Contract
             </button>
-            <button onclick="loadSample('balanced')" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-100">
-                ✅ Balanced Contract
+            <button onclick="loadSample('balanced')" class="tag bg-neutral-75 text-neutral-700 hover:bg-neutral-100 border border-neutral-150">
+                Balanced Contract
             </button>
         </div>
     </div>
@@ -31,19 +24,19 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Input -->
         <div>
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div class="card p-5">
                 <div class="flex items-center justify-between mb-3">
-                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Contract Text</label>
-                    <span id="wordCount" class="text-xs text-gray-400">0 words</span>
+                    <label class="section-label">Contract Text</label>
+                    <span id="wordCount" class="text-xs text-neutral-400">0 words</span>
                 </div>
-                <textarea id="contractInput" rows="22" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm resize-none leading-relaxed bg-surface-50 focus:bg-white transition-colors"
+                <textarea id="contractInput" rows="22" class="input w-full resize-none leading-relaxed"
                     oninput="document.getElementById('wordCount').textContent = (this.value.trim().split(/\s+/).filter(Boolean).length) + ' words'"
                     placeholder="Paste your freelance contract or agreement here...
 
 Example:
 This agreement is between TechCorp Inc. ('Client') and the Freelancer. The Freelancer agrees to provide web development services. All intellectual property created during the engagement shall belong exclusively to the Client..."></textarea>
                 <button onclick="scanContract()" id="scanBtn"
-                    class="mt-4 w-full py-3 gradient-bg text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-500/25 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                    class="mt-4 w-full py-3 btn-primary text-sm flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     Scan for Red Flags
                 </button>
@@ -52,25 +45,17 @@ This agreement is between TechCorp Inc. ('Client') and the Freelancer. The Freel
 
         <!-- Results -->
         <div>
-            <div id="scanResult" class="bg-white rounded-2xl border border-gray-100 p-6 min-h-[620px] shadow-sm">
-                <div id="scanEmpty" class="flex flex-col items-center justify-center h-96 text-gray-400">
-                    <div class="w-20 h-20 rounded-2xl bg-surface-50 flex items-center justify-center mb-4 float">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <div id="scanResult" class="card p-5 min-h-[620px]">
+                <div id="scanEmpty" class="flex flex-col items-center justify-center h-96 text-neutral-400">
+                    <div class="w-16 h-16 rounded-xl bg-neutral-75 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
-                    <p class="text-sm font-medium">Paste a contract to scan</p>
-                    <p class="text-xs text-gray-300 mt-1">AI will identify risks and favorable terms</p>
+                    <p class="text-sm font-medium text-neutral-500">Paste a contract to scan</p>
+                    <p class="text-xs text-neutral-400 mt-1">Risks and favorable terms will be identified</p>
                 </div>
                 <div id="scanLoading" class="hidden flex flex-col items-center justify-center h-96">
-                    <div class="relative">
-                        <div class="w-12 h-12 border-3 border-brand-100 rounded-full"></div>
-                        <div class="w-12 h-12 border-3 border-transparent border-t-brand-600 rounded-full animate-spin absolute inset-0"></div>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-4 font-medium">AI agent scanning contract...</p>
-                    <div class="flex gap-1 mt-2">
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 0ms"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 150ms"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" style="animation-delay: 300ms"></div>
-                    </div>
+                    <div class="spinner"></div>
+                    <p class="text-sm text-neutral-500 mt-4 font-medium">Scanning contract...</p>
                 </div>
                 <div id="scanContent" class="hidden space-y-4"></div>
             </div>
@@ -128,8 +113,8 @@ function loadSample(key) {
     const textarea = document.getElementById('contractInput');
     textarea.value = SAMPLES[key];
     textarea.dispatchEvent(new Event('input'));
-    textarea.classList.add('ring-2', 'ring-brand-200');
-    setTimeout(() => textarea.classList.remove('ring-2', 'ring-brand-200'), 500);
+    textarea.classList.add('ring-2', 'ring-neutral-200');
+    setTimeout(() => textarea.classList.remove('ring-2', 'ring-neutral-200'), 500);
 }
 
 async function scanContract() {
@@ -143,7 +128,7 @@ async function scanContract() {
     document.getElementById('scanContent').classList.add('hidden');
     document.getElementById('scanLoading').classList.remove('hidden');
     document.getElementById('scanBtn').disabled = true;
-    document.getElementById('scanBtn').innerHTML = '<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Scanning...';
+    document.getElementById('scanBtn').innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div> Scanning...';
 
     try {
         const res = await fetch('/api/scan-contract', {
@@ -172,34 +157,34 @@ function renderScan(data) {
     const c = document.getElementById('scanContent');
 
     const riskConfig = {
-        high: { color: 'red', bg: 'from-red-500 to-rose-600', icon: '🔴', label: 'HIGH RISK' },
-        medium: { color: 'amber', bg: 'from-amber-500 to-orange-500', icon: '🟡', label: 'MEDIUM RISK' },
-        low: { color: 'green', bg: 'from-green-500 to-emerald-500', icon: '🟢', label: 'LOW RISK' }
+        high: { color: 'red', label: 'HIGH RISK', bg: 'bg-red-600' },
+        medium: { color: 'amber', label: 'MEDIUM RISK', bg: 'bg-amber-500' },
+        low: { color: 'green', label: 'LOW RISK', bg: 'bg-green-600' }
     };
     const r = riskConfig[data.overall_risk] || riskConfig.medium;
     const riskPercent = data.risk_score != null ? data.risk_score : (data.overall_risk === 'high' ? 85 : data.overall_risk === 'low' ? 20 : 50);
 
     let html = `
         <!-- Risk Meter -->
-        <div class="p-5 rounded-xl bg-gradient-to-r ${r.bg} text-white scale-in">
+        <div class="p-5 rounded-lg ${r.bg} text-white">
             <div class="flex items-center justify-between mb-3">
                 <div>
                     <p class="text-xs font-medium text-white/70 uppercase tracking-wide">Overall Risk Assessment</p>
-                    <p class="text-2xl font-extrabold mt-1">${r.icon} ${r.label}</p>
+                    <p class="text-xl font-semibold mt-1">${r.label}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-3xl font-black">${riskPercent}%</p>
+                    <p class="text-3xl font-semibold tabular">${riskPercent}%</p>
                     <p class="text-xs text-white/70">risk score</p>
                 </div>
             </div>
-            <div class="w-full bg-white/20 rounded-full h-2 mb-2">
-                <div class="h-2 rounded-full bg-white/90 transition-all duration-1000" style="width: ${riskPercent}%"></div>
+            <div class="w-full bg-white/20 rounded-full h-1.5 mb-2">
+                <div class="h-1.5 rounded-full bg-white/90 transition-all duration-1000" style="width: ${riskPercent}%"></div>
             </div>
         </div>
 
         <!-- Summary -->
-        <div class="p-4 bg-surface-50 rounded-xl border border-gray-100">
-            <p class="text-sm text-gray-700 leading-relaxed">${data.summary}</p>
+        <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-100">
+            <p class="text-sm text-neutral-700 leading-relaxed">${data.summary}</p>
         </div>
     `;
 
@@ -209,17 +194,17 @@ function renderScan(data) {
                 <div class="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center">
                     <svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
                 </div>
-                <h4 class="text-xs font-bold text-red-600 uppercase tracking-wide">Red Flags (${data.red_flags.length})</h4>
+                <h4 class="section-label text-red-600">Red Flags (${data.red_flags.length})</h4>
             </div>`;
-        data.red_flags.forEach((f, i) => {
+        data.red_flags.forEach((f) => {
             const severityConfig = { high: 'red', medium: 'amber', low: 'yellow' };
-            const sc = severityConfig[f.severity] || 'gray';
-            html += `<div class="p-4 bg-${sc}-50/80 rounded-xl border border-${sc}-100 slide-in-left" style="animation-delay: ${i * 100}ms">
+            const sc = severityConfig[f.severity] || 'neutral';
+            html += `<div class="p-4 bg-${sc}-50 rounded-lg border border-${sc}-100">
                 <div class="flex items-start justify-between mb-2">
                     <p class="text-sm font-semibold text-${sc}-800">${f.issue}</p>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-${sc}-200 text-${sc}-800 font-bold uppercase">${f.severity}</span>
+                    <span class="tag bg-${sc}-100 text-${sc}-800 uppercase text-[10px] font-semibold">${f.severity}</span>
                 </div>
-                <p class="text-xs text-gray-500 italic mb-2 border-l-2 border-${sc}-200 pl-3">"${f.clause}"</p>
+                <p class="text-xs text-neutral-500 italic mb-2 border-l-2 border-${sc}-200 pl-3">"${f.clause}"</p>
                 <div class="flex items-start gap-2 mt-2 p-2 bg-white/60 rounded-lg">
                     <svg class="w-4 h-4 text-${sc}-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                     <p class="text-xs text-${sc}-700"><strong>Suggestion:</strong> ${f.suggestion}</p>
@@ -235,11 +220,11 @@ function renderScan(data) {
                 <div class="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center">
                     <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h4 class="text-xs font-bold text-green-600 uppercase tracking-wide">Favorable Terms (${data.favorable_terms.length})</h4>
+                <h4 class="section-label text-green-600">Favorable Terms (${data.favorable_terms.length})</h4>
             </div>`;
         data.favorable_terms.forEach(f => {
-            html += `<div class="p-3 bg-green-50/80 rounded-xl border border-green-100 flex items-start gap-3">
-                <div class="w-5 h-5 rounded-md bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            html += `<div class="p-3 bg-green-50 rounded-lg border border-green-100 flex items-start gap-3">
+                <div class="w-5 h-5 rounded bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                 </div>
                 <div>
@@ -252,12 +237,12 @@ function renderScan(data) {
     }
 
     if (data.missing_clauses && data.missing_clauses.length > 0) {
-        html += `<div class="p-4 bg-amber-50/80 rounded-xl border border-amber-100">
+        html += `<div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
             <div class="flex items-center gap-2 mb-3">
                 <div class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center">
                     <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                 </div>
-                <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wide">Missing Clauses</h4>
+                <h4 class="section-label text-amber-700">Missing Clauses</h4>
             </div>
             <div class="space-y-2">${data.missing_clauses.map(m =>
                 `<div class="flex items-center gap-2">
@@ -268,9 +253,8 @@ function renderScan(data) {
         </div>`;
     }
 
-    // Add disclaimer
-    html += `<div class="p-4 bg-gray-50 rounded-xl border border-gray-200 mt-4">
-        <p class="text-xs text-gray-500 leading-relaxed">⚠️ <strong>Disclaimer:</strong> This analysis is AI-generated and does not constitute legal advice. Always consult a qualified lawyer before signing any contract.</p>
+    html += `<div class="p-4 bg-neutral-50 rounded-lg border border-neutral-150 mt-4">
+        <p class="text-xs text-neutral-500 leading-relaxed"><strong>Disclaimer:</strong> This analysis is automated and does not constitute legal advice. Always consult a qualified lawyer before signing any contract.</p>
     </div>`;
 
     c.innerHTML = html;
